@@ -81,6 +81,7 @@ export const SYSTEM = async () => {
 
   await OrganisationUnit.createTree({
     name: 'Root',
+    shortName: 'Root',
     description: 'Root',
     id: '6269df23-f8a0-4776-bd89-3015521bc19d',
     code: '0001-ROOT',
@@ -99,7 +100,7 @@ export const DB = {
   database: process.env.POSTGRES_DB,
   dropSchema: process.env.DROP_SCHEMA === 'TRUE' ? true : false,
   logging: false,
-  synchronize: process.env.NODE_ENV === 'development',
+  synchronize: process.env.SYNCHRONIZE === 'TRUE',
 };
 
 export const APPENV = {
