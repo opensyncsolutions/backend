@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DB, schemaEntities } from '@app/rkpk';
+import { CLIENT, DB, schemaEntities } from '@app/rkpk';
 import { AuthModule } from './modules/auth/auth.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', CLIENT),
+    }),
     TypeOrmModule.forRoot({
       name: 'default',
       type: 'postgres',

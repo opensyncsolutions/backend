@@ -1,9 +1,9 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import * as crypto from 'crypto';
+import { existsSync, mkdirSync } from 'fs';
 import { OrganisationUnit, Privilege, Role, User } from '../entities';
 import { schemaEntities } from '../schema.entities';
 
-const SYSTEMPATH = './files';
+export const SYSTEMPATH = './files';
+export const CLIENT = process.env.CLIENT || './files/client';
 export const ASSETS = './files/assets';
 export const TEMPFILES = './files/tmp';
 export const TEMPLATES = './files/templates';
@@ -12,45 +12,9 @@ export const PUBLIC_KEY = `${KEYSPATH}/public.pem`;
 export const PRIVATE_KEY = `${KEYSPATH}/private.pem`;
 export const PORT = process.env.PORT || 3000;
 
-const CREATEKEYS = () => {
-  if (!existsSync(KEYSPATH)) {
-    mkdirSync(KEYSPATH);
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-      modulusLength: 2048,
-      publicKeyEncoding: {
-        type: 'pkcs1',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs1',
-        format: 'pem',
-      },
-    });
-    writeFileSync(PUBLIC_KEY, Buffer.from(publicKey));
-    writeFileSync(PRIVATE_KEY, Buffer.from(privateKey));
-    return;
-  }
-  if (!existsSync(PUBLIC_KEY)) {
-    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-      modulusLength: 2048,
-      publicKeyEncoding: {
-        type: 'pkcs1',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs1',
-        format: 'pem',
-      },
-    });
-    writeFileSync(PUBLIC_KEY, Buffer.from(publicKey));
-    writeFileSync(PRIVATE_KEY, Buffer.from(privateKey));
-  }
-};
-
 export const SYSTEM = async () => {
   if (!existsSync(SYSTEMPATH)) {
     mkdirSync(SYSTEMPATH);
-    mkdirSync(KEYSPATH);
   }
 
   if (!existsSync(KEYSPATH)) {
@@ -68,7 +32,10 @@ export const SYSTEM = async () => {
   if (!existsSync(TEMPLATES)) {
     mkdirSync(TEMPLATES);
   }
-  CREATEKEYS();
+
+  if (!existsSync(CLIENT)) {
+    mkdirSync(CLIENT);
+  }
 
   await Privilege.createPrivileges([
     {
@@ -76,7 +43,7 @@ export const SYSTEM = async () => {
       name: 'Super User',
       value: 'ALL',
       system: true,
-    },
+    } as Privilege,
   ]);
 
   await Role.createRoles([

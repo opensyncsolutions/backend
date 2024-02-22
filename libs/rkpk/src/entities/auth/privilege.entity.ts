@@ -26,13 +26,13 @@ export class Privilege extends DateEntity {
   @ApiPropertyOptional()
   description: string;
 
-  public static createPrivileges = async (privileges: any): Promise<void> => {
+  public static createPrivileges = async (
+    privileges: Privilege[],
+  ): Promise<void> => {
     for (const privilege of privileges) {
       try {
         await Privilege.save(privilege);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     }
   };
 }
