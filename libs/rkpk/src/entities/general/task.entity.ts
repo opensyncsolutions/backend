@@ -6,6 +6,10 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 @Entity('task', { schema: 'public' })
 export class Task extends NameEntity {
   static plural = 'tasks';
+  static READ = 'READ_TASKS';
+  static ADD = 'ADD_TASKS';
+  static DELETE = 'DELETE_TASKS';
+  static UPDATE = 'UPDATE_TASKS';
 
   @Column({ default: 'STARTED' })
   @ApiPropertyOptional()

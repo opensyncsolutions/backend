@@ -22,17 +22,17 @@ export class Privilege extends DateEntity {
   @ApiProperty()
   value: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiPropertyOptional()
   description: string;
 
-  public static createSuperPrivilege = async (
-    privileges: any,
-  ): Promise<void> => {
+  public static createPrivileges = async (privileges: any): Promise<void> => {
     for (const privilege of privileges) {
       try {
         await Privilege.save(privilege);
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 }

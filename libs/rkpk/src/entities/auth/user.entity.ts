@@ -135,6 +135,7 @@ export class User extends DateEntity {
         [isEmail ? 'email' : Number(username) ? 'phoneNumber' : 'username']:
           username,
       },
+      relations: ['roles', 'roles.privileges', 'userGroups'],
     });
 
     return user;
@@ -160,6 +161,7 @@ export class User extends DateEntity {
         [isEmail ? 'email' : Number(username) ? 'phoneNumber' : 'username']:
           username,
       },
+      relations: ['roles', 'roles.privileges', 'userGroups'],
     });
 
     if (

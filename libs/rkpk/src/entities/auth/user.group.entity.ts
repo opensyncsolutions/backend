@@ -5,6 +5,10 @@ import { User } from './user.entity';
 @Entity('usergroups', { schema: 'public' })
 export class UserGroup extends DateEntity {
   static plural = 'userGroups';
+  static READ = 'READ_USERGROUPS';
+  static ADD = 'ADD_USERGROUPS';
+  static DELETE = 'DELETE_USERGROUPS';
+  static UPDATE = 'UPDATE_USERGROUPS';
 
   @Column()
   name: string;

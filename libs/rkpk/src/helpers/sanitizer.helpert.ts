@@ -1,5 +1,5 @@
 import { BadRequestException, Logger } from '@nestjs/common';
-import { User } from '../entities';
+import { Privilege, Role, User } from '../entities';
 import { isUUID } from 'class-validator';
 import { throwError } from './base.helper';
 
@@ -288,12 +288,10 @@ export const sanitizeRequest: any = (
 
 export const USERAUTHORITIES = (user: User) => {
   try {
-    /*const roles = user?.roles?.map((role: Role) =>
-      role?.privileges?.map((privilege: Privilege) => privilege.name),
+    const roles = user?.roles?.map((role: Role) =>
+      role?.privileges?.map((privilege: Privilege) => privilege.value),
     );
-    return roles?.flat() ?? [];*/
-    user;
-    return [];
+    return roles?.flat() ?? [];
   } catch (e) {
     Logger.error(e?.message?.toUpperCase(), 'ERROR AUTH');
     return [];

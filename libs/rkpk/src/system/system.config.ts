@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import * as crypto from 'crypto';
-import { OrganisationUnit, User } from '../entities';
+import { OrganisationUnit, Privilege, Role, User } from '../entities';
+import { schemaEntities } from '../schema.entities';
 
 const SYSTEMPATH = './files';
 export const ASSETS = './files/assets';
@@ -69,6 +70,24 @@ export const SYSTEM = async () => {
   }
   CREATEKEYS();
 
+  await Privilege.createPrivileges([
+    {
+      id: '6269df23-f8a0-4776-bd89-3015521bc19d',
+      name: 'Super User',
+      value: 'ALL',
+      system: true,
+    },
+  ]);
+
+  await Role.createRoles([
+    {
+      id: '6269df23-f8a0-4776-bd89-3015521bc19d',
+      name: 'Super User',
+      system: true,
+      privileges: [{ id: '6269df23-f8a0-4776-bd89-3015521bc19d' }],
+    },
+  ]);
+
   await User.createSuperUser({
     id: '6269df23-f8a0-4776-bd89-3015521bc19d',
     name: 'Admin',
@@ -78,6 +97,7 @@ export const SYSTEM = async () => {
     password: '$2b$10$RvNNdflLzhnEFxBFk47XPeGPMRCM.Bqal2A3s0eE45vJejpuvOknC',
     salt: '$2b$10$RvNNdflLzhnEFxBFk47XPe',
     canLogin: true,
+    roles: [{ id: '6269df23-f8a0-4776-bd89-3015521bc19d' }],
   });
 
   await OrganisationUnit.createTree({
@@ -89,6 +109,34 @@ export const SYSTEM = async () => {
     level: 1,
     createdBy: { id: '6269df23-f8a0-4776-bd89-3015521bc19d' },
   });
+  let privileges = [];
+  for (const entity of schemaEntities) {
+    privileges = [
+      ...privileges,
+      {
+        name: `Authority to add ${entity.plural}`,
+        value: entity.ADD,
+        system: true,
+      },
+      {
+        name: `Authority to read ${entity.plural}`,
+        value: entity.READ,
+        system: true,
+      },
+      {
+        name: `Authority to update ${entity.plural}`,
+        value: entity.UPDATE,
+        system: true,
+      },
+      {
+        name: `Authority to delete ${entity.plural}`,
+        value: entity.DELETE,
+        system: true,
+      },
+    ];
+  }
+
+  Privilege.createPrivileges(privileges);
 };
 
 export const SESSIONTIME = Number(process.env.SESSION_TIME) || 5e8;

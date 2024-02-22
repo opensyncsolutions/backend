@@ -32,7 +32,7 @@ export class Role extends DateEntity {
   @ApiProperty()
   privileges: Privilege[];
 
-  public static createSuperRole = async (roles: any): Promise<void> => {
+  public static createRoles = async (roles: any): Promise<void> => {
     for (const role of roles) {
       try {
         await Role.save(role);
