@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import * as crypto from 'crypto';
-import { User } from '../entities';
+import { OrganisationUnit, User } from '../entities';
 
 const SYSTEMPATH = './files';
 export const ASSETS = './files/assets';
@@ -45,7 +45,7 @@ const CREATEKEYS = () => {
   }
 };
 
-export const SYSTEM = () => {
+export const SYSTEM = async () => {
   if (!existsSync(SYSTEMPATH)) {
     mkdirSync(SYSTEMPATH);
     mkdirSync(KEYSPATH);
@@ -68,7 +68,7 @@ export const SYSTEM = () => {
   }
   CREATEKEYS();
 
-  User.createSuperUser({
+  await User.createSuperUser({
     id: '6269df23-f8a0-4776-bd89-3015521bc19d',
     name: 'Admin',
     username: 'admin',
@@ -77,6 +77,15 @@ export const SYSTEM = () => {
     password: '$2b$10$RvNNdflLzhnEFxBFk47XPeGPMRCM.Bqal2A3s0eE45vJejpuvOknC',
     salt: '$2b$10$RvNNdflLzhnEFxBFk47XPe',
     canLogin: true,
+  });
+
+  await OrganisationUnit.createTree({
+    name: 'Root',
+    description: 'Root',
+    id: '6269df23-f8a0-4776-bd89-3015521bc19d',
+    code: '0001-ROOT',
+    level: 1,
+    createdBy: { id: '6269df23-f8a0-4776-bd89-3015521bc19d' },
   });
 };
 

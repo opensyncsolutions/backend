@@ -1,3 +1,3 @@
-import { Process, Schedule, Task, User } from './entities';
+import { OrganisationUnit, Process, Schedule, Task, User } from './entities';
 
-export const schemaEntities = [User, Process, Task, Schedule];
+export const schemaEntities = [User, Process, Task, Schedule, OrganisationUnit];

@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DB, schemaEntities } from '@app/rkpk';
 import { AuthModule } from './modules/auth/auth.module';
+import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
       entities: [...schemaEntities],
     }),
     AuthModule,
+    OrganisationUnitModule,
   ],
   controllers: [AppController],
 })

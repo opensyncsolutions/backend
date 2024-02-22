@@ -3,10 +3,10 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { IsNotEmpty } from 'class-validator';
 import { BadRequestException, Logger } from '@nestjs/common';
-import { Owner } from './creator.entity';
+import { DateEntity } from './date.entity';
 
 @Entity('user')
-export class User extends Owner {
+export class User extends DateEntity {
   static plural = 'users';
   @Column({ name: 'phonenumber', unique: true })
   @ApiPropertyOptional()
