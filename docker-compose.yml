@@ -1,0 +1,22 @@
+version: '3.2'
+
+services:
+  api:
+    build:
+     context: .
+     target: development
+    env_file:
+      - .env
+    restart: always
+    command: npm run start:dev
+    ports:
+       - 3000:3000
+    volumes:
+      - ./src:/app/src
+      - ./libs:/app/libs
+      - ./files:/app/files
+
+networks:
+  default:
+    external: true
+    name: local-docker-network
