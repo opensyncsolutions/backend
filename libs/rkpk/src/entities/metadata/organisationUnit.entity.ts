@@ -6,7 +6,7 @@ import {
   TreeChildren,
   TreeParent,
 } from 'typeorm';
-import { NameEntity } from './named.entity';
+import { NameEntity } from '../general/named.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BadRequestException } from '@nestjs/common';
 
@@ -14,6 +14,11 @@ import { BadRequestException } from '@nestjs/common';
 @Tree('closure-table')
 export class OrganisationUnit extends NameEntity {
   static plural = 'organisationUnits';
+  static READ = 'READ_ORGANISATIONUNITS';
+  static ADD = 'ADD_ORGANISATIONUNITS';
+  static DELETE = 'DELETE_ORGANISATIONUNITS';
+  static UPDATE = 'UPDATE_ORGANISATIONUNITS';
+
   @Column({ name: 'shortname' })
   @ApiProperty()
   shortName: string;

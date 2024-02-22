@@ -1,7 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ApiLogger, HttpErrorFilter, SYSTEM, schemaEntities } from '@app/rkpk';
+import {
+  ApiLogger,
+  HttpErrorFilter,
+  PORT,
+  SYSTEM,
+  schemaEntities,
+} from '@app/rkpk';
 import * as session from 'express-session';
 import { createClient } from 'redis';
 import * as passport from 'passport';
@@ -11,7 +17,7 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const RedisStore = require('connect-redis').default;
 
@@ -59,6 +65,7 @@ async function bootstrap() {
   const Document = SwaggerModule.createDocument(app, config, options);
   SwaggerModule.setup('api', app, Document);
 
-  await app.listen(3000);
+  await app.listen(PORT);
+  Logger.debug(`App running on port: ${PORT}`, 'APP PORT');
 }
 bootstrap();

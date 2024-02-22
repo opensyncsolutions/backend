@@ -6,9 +6,10 @@ const SYSTEMPATH = './files';
 export const ASSETS = './files/assets';
 export const TEMPFILES = './files/tmp';
 export const TEMPLATES = './files/templates';
-const KEYSPATH = `${SYSTEMPATH}/keys`;
+export const KEYSPATH = `${SYSTEMPATH}/keys`;
 export const PUBLIC_KEY = `${KEYSPATH}/public.pem`;
 export const PRIVATE_KEY = `${KEYSPATH}/private.pem`;
+export const PORT = process.env.PORT || 3000;
 
 const CREATEKEYS = () => {
   if (!existsSync(KEYSPATH)) {

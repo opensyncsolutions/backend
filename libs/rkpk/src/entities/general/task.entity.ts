@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
-import { LogDetails } from '../interfaces';
+import { LogDetails } from '../../interfaces';
 import { NameEntity } from './named.entity';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 

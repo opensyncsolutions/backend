@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../auth/user.entity';
 
 export class DateEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -24,6 +24,7 @@ export class DateEntity extends BaseEntity {
   updated: Date;
 
   @Column({ nullable: true, unique: true })
+  @ApiPropertyOptional()
   code: string;
 
   @ManyToOne(() => User, (user) => user, {

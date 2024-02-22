@@ -1,22 +1,23 @@
 import { Column, Entity } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { NameEntity } from './named.entity';
 
 @Entity('process', { schema: 'public' })
 export class Process extends NameEntity {
   static plural = 'processes';
-  @Column('text', {
-    nullable: false,
-  })
-  @ApiProperty({ nullable: false })
+  @Column()
+  @ApiProperty()
   script: string;
 
   @Column({ name: 'param', type: 'json', nullable: true })
+  @ApiPropertyOptional()
   params: any[];
 
   @Column({ default: false })
+  @ApiPropertyOptional()
   download: boolean;
 
   @Column({ unique: true })
+  @ApiPropertyOptional()
   code: string;
 }

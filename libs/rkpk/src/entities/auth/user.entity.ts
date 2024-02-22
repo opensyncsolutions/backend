@@ -1,13 +1,20 @@
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { IsNotEmpty } from 'class-validator';
 import { BadRequestException, Logger } from '@nestjs/common';
-import { DateEntity } from './date.entity';
+import { DateEntity } from '../general/date.entity';
+import { UserGroup } from './user.group.entity';
+import { Role } from './role.entity';
 
 @Entity('user')
 export class User extends DateEntity {
   static plural = 'users';
+  static READ = 'READ_USERS';
+  static ADD = 'ADD_USERS';
+  static DELETE = 'DELETE_USERS';
+  static UPDATE = 'UPDATE_USERS';
+
   @Column({ name: 'phonenumber', unique: true })
   @ApiPropertyOptional()
   @IsNotEmpty({ message: 'Phone number is required' })
@@ -43,7 +50,34 @@ export class User extends DateEntity {
   salt: string;
 
   @Column({ default: true })
+  @ApiPropertyOptional()
   active: boolean;
+
+  @ManyToMany(() => UserGroup, (userGroup) => userGroup.users, {
+    cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'usergroupaccess',
+    joinColumn: { referencedColumnName: 'id', name: 'user' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'group' },
+  })
+  @ApiPropertyOptional({ type: UserGroup })
+  userGroups: UserGroup[];
+
+  @ManyToMany(() => Role, (role) => role, {
+    nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'userrole',
+    joinColumn: { referencedColumnName: 'id', name: 'user' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'role' },
+  })
+  @ApiPropertyOptional({ type: Role })
+  roles: Role[];
 
   @BeforeInsert()
   async beforeInsertTransaction() {
