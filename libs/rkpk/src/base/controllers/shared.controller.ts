@@ -216,12 +216,7 @@ export class SharedController<T extends BaseEntity> {
     @Param('id') id: string,
   ) {
     try {
-      return await this.service.asset(
-        file,
-        req.session['user'],
-        `${req.protocol}://${req.headers.host}`,
-        id,
-      );
+      return await this.service.asset(file, req.session['user'], id);
     } catch (e) {
       try {
         unlinkSync(`${ASSETS}/${req.params.id}/${file.filename}`);

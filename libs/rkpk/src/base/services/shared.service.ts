@@ -1,31 +1,44 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { isUUID } from 'class-validator';
 import { existsSync, unlinkSync } from 'fs';
 import * as nodemailer from 'nodemailer';
 import {
   BaseEntity,
+  Between,
   EntityMetadata,
   EntityTarget,
   FindOptionsOrder,
   FindOptionsRelations,
   FindOptionsWhere,
-  IsNull,
-  TreeRepository,
-  In,
-  Between,
   ILike,
-  Like,
-  Not,
+  In,
+  IsNull,
   LessThan,
   LessThanOrEqual,
+  Like,
   MoreThan,
   MoreThanOrEqual,
+  Not,
+  TreeRepository,
 } from 'typeorm';
+import * as XLSX from 'xlsx';
+import {
+  APPENV,
+  ASSETS,
+  DataImportPayload,
+  FileInterface,
+  Process,
+  TEMPFILES,
+  Task,
+  User,
+  compressImage,
+  schemaEntities,
+} from '../..';
 import {
   checkIfValidUUID,
   getWhereConditions,
@@ -47,20 +60,6 @@ import {
   LogDetails,
   RunProcessInterface,
 } from '../../interfaces/shared.interface';
-import * as XLSX from 'xlsx';
-import {
-  APPENV,
-  ASSETS,
-  DataImportPayload,
-  FileInterface,
-  Process,
-  TEMPFILES,
-  Task,
-  User,
-  compressImage,
-  schemaEntities,
-} from '../..';
-import { isUUID } from 'class-validator';
 
 export class SharedService<T extends BaseEntity> {
   Entity: EntityTarget<T>;
@@ -98,12 +97,9 @@ export class SharedService<T extends BaseEntity> {
 
   findOneOrFail = async (payload: GetOneReqInterface): Promise<T> => {
     const AUTHORITIES = USERAUTHORITIES(payload.user);
-    return await this.findOne(payload);
     if (
       AUTHORITIES?.includes(this.entity['READ']) ||
-      AUTHORITIES?.includes('ALL') ||
-      AUTHORITIES?.includes('READ_ALL') ||
-      this.Entity['READ'] === 'ALL'
+      AUTHORITIES?.includes('ALL')
     ) {
       return await this.findOne(payload);
     }
@@ -145,12 +141,9 @@ export class SharedService<T extends BaseEntity> {
 
   findMany = async (payload: GetManyReqInterface) => {
     const AUTHORITIES = USERAUTHORITIES(payload.user);
-    return await this.getMany({ payload, roles: AUTHORITIES });
     if (
       AUTHORITIES?.includes(this.entity['READ']) ||
-      AUTHORITIES?.includes('ALL') ||
-      AUTHORITIES?.includes('READ_ALL') ||
-      this.Entity['READ'] === 'ALL'
+      AUTHORITIES?.includes('ALL')
     ) {
       return await this.getMany({ payload, roles: AUTHORITIES });
     }
@@ -190,19 +183,7 @@ export class SharedService<T extends BaseEntity> {
 
   delete = async (id: string, user: User): Promise<any> => {
     const AUTHORITIES = USERAUTHORITIES(user);
-    const entity = await this.repository.findOneOrFail({
-      where: { id } as unknown as FindOptionsWhere<T>,
-    });
-    if (entity['checked']) {
-      this.throwGenericError(
-        new ForbiddenException('You can not delete this rkpk. User checked in'),
-      );
-    }
-    await this.deleteEntity(id);
-    this.runProcess({ code: 'POST_DELETE', params: { user } });
-    return {
-      message: `${this.repository.metadata.name} deleted successfully`,
-    };
+
     if (
       AUTHORITIES?.includes(this.entity['DELETE']) ||
       AUTHORITIES?.includes('ALL')
@@ -283,7 +264,6 @@ export class SharedService<T extends BaseEntity> {
   asset = async (
     file: FileInterface,
     user: User,
-    host: string,
     id: string,
   ): Promise<FileUploadResponse> => {
     if (!file) {
@@ -474,9 +454,7 @@ export class SharedService<T extends BaseEntity> {
 
       message = message?.includes('is still referenced from table')
         ? `You can not delete ${this.Entity['name'].toLowerCase()} with ${
-            (e.table || message[0]?.toLowerCase()) === 'usercompanies'
-              ? 'users'
-              : e.table || message[0]?.toLowerCase()
+            e.table || message[0]?.toLowerCase()
           }`
         : message;
       this.throwGenericError(new BadRequestException(message));
@@ -554,7 +532,6 @@ export class SharedService<T extends BaseEntity> {
   create = async (payload: T): Promise<T> => {
     const AUTHORITIES = USERAUTHORITIES(payload['user']);
     delete payload['user'];
-    return await this.createNewEntity(payload);
     if (
       AUTHORITIES?.includes(this.entity['ADD']) ||
       AUTHORITIES?.includes('ALL')
@@ -576,7 +553,6 @@ export class SharedService<T extends BaseEntity> {
 
   update = async (payload: T): Promise<T> => {
     const AUTHORITIES = USERAUTHORITIES(payload['user']);
-    return await this.updateEntity(payload);
     if (
       AUTHORITIES?.includes(this.entity['UPDATE']) ||
       AUTHORITIES?.includes('ALL')
