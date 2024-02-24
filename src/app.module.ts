@@ -6,6 +6,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { EnrollmentModule } from './modules/enrollment/enrollment.module';
+import { ObjectiveModule } from './modules/objective/objective.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     AuthModule,
     OrganisationUnitModule,
+    EnrollmentModule,
+    ObjectiveModule,
   ],
   controllers: [AppController],
 })
