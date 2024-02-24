@@ -9,6 +9,7 @@ import {
 import { NameEntity } from '../general/named.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BadRequestException } from '@nestjs/common';
+import { APPENV } from '../..';
 
 @Entity('organisationunit')
 @Tree('closure-table')
@@ -36,16 +37,16 @@ export class OrganisationUnit extends NameEntity {
   level: number;
 
   @TreeChildren()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: [OrganisationUnit] })
   children: OrganisationUnit[];
 
   @TreeParent()
-  @ApiPropertyOptional()
+  @ApiProperty({ type: OrganisationUnit })
   parent: OrganisationUnit;
 
   @BeforeInsert()
   async beforeInsertTransaction() {
-    if (!this.level || this.level > 1) {
+    if ((!this.level || this.level > 1) && !APPENV.ALLOWROOTS) {
       const parent = await OrganisationUnit.findOne({
         where: { id: this.parent?.id },
       });

@@ -132,4 +132,5 @@ export const APPENV = {
   SYSTEMPATH: SYSTEMPATH,
   TEMPLATES: TEMPLATES,
   DOWNLOAD_COUNT: Number(process.env.DOWNLOAD_COUNT || 20),
+  ALLOWROOTS: (process.env.ALLOWROOTS || '').toLowerCase() === 'true',
 };
