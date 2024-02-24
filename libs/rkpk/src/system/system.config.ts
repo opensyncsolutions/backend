@@ -126,7 +126,7 @@ export const APPENV = {
     | 'development'
     | 'test'
     | 'production',
-  COOKIE_SECRET: process.env.COOKIE_SECRET,
+  COOKIE_SECRET: process.env.COOKIE_SECRET || 'RKPK@12!AFYA!!',
   TEMPFILES: TEMPFILES,
   ASSETS: ASSETS,
   SYSTEMPATH: SYSTEMPATH,
@@ -134,3 +134,5 @@ export const APPENV = {
   DOWNLOAD_COUNT: Number(process.env.DOWNLOAD_COUNT || 20),
   ALLOWROOTS: (process.env.ALLOWROOTS || '').toLowerCase() === 'true',
 };
+
+console.log(APPENV);

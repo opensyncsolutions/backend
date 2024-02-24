@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {
+  APPENV,
   ApiLogger,
   HttpErrorFilter,
   PORT,
@@ -47,7 +48,7 @@ async function bootstrap() {
       }),
       resave: false,
       saveUninitialized: false,
-      secret: process.env.COOKIE_SECRET || 'RKPK@12!AFYA!!',
+      secret: APPENV.COOKIE_SECRET,
     }),
   );
   app.use(passport.initialize());
