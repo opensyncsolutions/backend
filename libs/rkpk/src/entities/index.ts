@@ -8,3 +8,5 @@ export * from './auth/role.entity';
 export * from './auth/user.group.entity';
 export * from './data/enrollment.entity';
 export * from './data/objective.entity';
+export * from './metadata/field.entity';
+export * from './metadata/form.entity';

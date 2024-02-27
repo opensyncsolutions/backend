@@ -134,5 +134,3 @@ export const APPENV = {
   DOWNLOAD_COUNT: Number(process.env.DOWNLOAD_COUNT || 20),
   ALLOWROOTS: (process.env.ALLOWROOTS || '').toLowerCase() === 'true',
 };
-
-console.log(APPENV);

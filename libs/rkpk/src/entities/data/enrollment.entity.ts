@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Objective } from './objective.entity';
 
@@ -10,6 +10,9 @@ export class Enrollment extends DateEntity {
   static ADD = 'ADD_ENROLLMENTS';
   static DELETE = 'DELETE_ENROLLMENTS';
   static UPDATE = 'UPDATE_ENROLLMENTS';
+
+  @Column()
+  status: 'CONTROL' | 'INTERVENTION';
 
   @ManyToOne(() => Objective, (objective) => objective, {
     nullable: false,

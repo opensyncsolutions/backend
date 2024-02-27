@@ -8,6 +8,7 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
+import { FormModule } from './modules/form/form.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ObjectiveModule } from './modules/objective/objective.module';
     OrganisationUnitModule,
     EnrollmentModule,
     ObjectiveModule,
+    FormModule,
   ],
   controllers: [AppController],
 })
