@@ -12,7 +12,11 @@ export class Field extends NameEntity {
 
   @Column({ type: 'json', nullable: true })
   @ApiPropertyOptional()
-  translations: any;
+  translations: any[];
+
+  @Column({ type: 'json', nullable: true })
+  @ApiPropertyOptional()
+  options: any[];
 
   @Column()
   @ApiProperty()
@@ -24,5 +28,5 @@ export class Field extends NameEntity {
 
   @Column()
   @ApiProperty()
-  type: string;
+  type: 'DATE' | 'TEXT' | 'LONG_TEXT' | 'BOOLEAN' | 'NUMBER';
 }

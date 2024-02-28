@@ -390,6 +390,54 @@ export class SharedService<T extends BaseEntity> {
     return sanitizedData;
   };
 
+  fields = (user: User) => {
+    const AUTHORITIES = USERAUTHORITIES(user);
+    if (
+      AUTHORITIES?.includes(this.entity['DELETE']) ||
+      AUTHORITIES?.includes('ALL')
+    )
+      return this.repository.metadata.columns
+        .map((field) => {
+          if (
+            field.type !== 'uuid' &&
+            field.propertyName !== 'created' &&
+            field.propertyName !== 'updated'
+          ) {
+            return {
+              name: field.propertyName,
+              mandatory: !field.isNullable && !field.default,
+              type: this.getColumnType(field.type.toString()),
+            };
+          }
+        })
+        .filter((field) => field);
+    new UnauthorizedException(
+      `You have no permission to view ${this.entity['plural']}`,
+    );
+  };
+
+  private getColumnType = (type: string): string => {
+    switch (true) {
+      case type.includes('String()'):
+        return 'TEXT';
+
+      case type.includes('Boolean()'):
+        return 'BOOLEAN';
+
+      case type.includes('Number()'):
+        return 'NUMBER';
+
+      case type.includes('timestamp') || type.includes('Date()'):
+        return 'DATE';
+
+      case type.includes('json'):
+        return 'JSON';
+
+      default:
+        return 'TEXT';
+    }
+  };
+
   private saveFromBulky = async (
     payload: T,
     update: boolean,

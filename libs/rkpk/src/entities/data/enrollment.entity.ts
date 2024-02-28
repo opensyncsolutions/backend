@@ -20,7 +20,7 @@ export class Enrollment extends DateEntity {
   static DELETE = 'DELETE_ENROLLMENTS';
   static UPDATE = 'UPDATE_ENROLLMENTS';
 
-  @Column()
+  @Column({ default: 'CONTROL' })
   status: 'CONTROL' | 'INTERVENTION';
 
   @ManyToOne(() => Objective, (objective) => objective, {
