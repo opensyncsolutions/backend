@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { NameEntity } from '../general/named.entity';
 import { Field } from './field.entity';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity('form')
 export class Form extends NameEntity {
@@ -15,11 +15,17 @@ export class Form extends NameEntity {
   @ApiPropertyOptional()
   translations: any;
 
-  @OneToMany(() => Field, (field) => field.form, {
+  @ManyToMany(() => Field, (field) => field, {
+    nullable: false,
     cascade: true,
-    onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
-  @ApiProperty({ type: Field })
+  @JoinTable({
+    name: 'formfield',
+    joinColumn: { referencedColumnName: 'id', name: 'form' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'field' },
+  })
+  @ApiPropertyOptional({ type: [Field] })
   fields: Field[];
 }

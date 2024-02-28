@@ -8,6 +8,7 @@ import {
   Process,
   Role,
   Schedule,
+  Section,
   Task,
   User,
   UserGroup,
@@ -26,4 +27,5 @@ export const schemaEntities = [
   Objective,
   Form,
   Field,
+  Section,
 ];

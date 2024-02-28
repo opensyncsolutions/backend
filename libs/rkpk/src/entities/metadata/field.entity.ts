@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { NameEntity } from '../general/named.entity';
-import { Form } from './form.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Column, Entity } from 'typeorm';
+import { NameEntity } from '../general/named.entity';
 
 @Entity('field')
 export class Field extends NameEntity {
@@ -26,13 +25,4 @@ export class Field extends NameEntity {
   @Column()
   @ApiProperty()
   type: string;
-
-  @ManyToOne(() => Form, (form) => form, {
-    nullable: false,
-    cascade: false,
-    eager: false,
-  })
-  @JoinColumn({ name: 'form', referencedColumnName: 'id' })
-  @ApiProperty({ type: Form })
-  form: Form;
 }

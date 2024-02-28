@@ -10,3 +10,4 @@ export * from './data/enrollment.entity';
 export * from './data/objective.entity';
 export * from './metadata/field.entity';
 export * from './metadata/form.entity';
+export * from './metadata/section.entity';
