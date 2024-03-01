@@ -3,6 +3,15 @@ import { Privilege, Role, User } from '../entities';
 import { isUUID } from 'class-validator';
 import { throwError } from './base.helper';
 
+const omit = (
+  responseObject: { [x: string]: any },
+  responseObjectProps: any[],
+) => {
+  responseObject = { ...responseObject };
+  responseObjectProps.forEach((prop) => delete responseObject[prop]);
+  return responseObject;
+};
+
 const sanitizeNullError = (message: string) => {
   const column = message?.split('"');
   return `${column[1]} can not be null`;
@@ -26,21 +35,15 @@ const sanitizeFinalMessage = (message: string): string => {
       ? 'Password is required'
       : message?.includes('null value in column')
         ? sanitizeNullError(message)
-        : message?.includes('You have an error in your SQL')
-          ? 'Internal Server Error(DB)'
-          : message?.includes('no such file')
-            ? 'Asset missing'
-            : message?.includes('have a default value')
-              ? message
-                  ?.split("doesn't have a default value")
-                  ?.join('can not be null')
-              : message?.includes('Duplicate entry')
-                ? 'Resource already exists'
-                : message.includes('auctionwarehouses')
-                  ? message.split('auctionwarehouses').join('warehouses')
-                  : message?.includes('season with name, startdate, enddate')
-                    ? 'Season already exists'
-                    : message;
+        : message?.includes('no such file')
+          ? 'Asset missing'
+          : message?.includes('have a default value')
+            ? message
+                ?.split("doesn't have a default value")
+                ?.join('can not be null')
+            : message?.includes('Duplicate entry')
+              ? 'Resource already exists'
+              : message;
 };
 
 /**
@@ -137,15 +140,6 @@ export const errorSanitizer = (error: {
 };
 
 const sanitizeObject = (responseObject: any, resource: string) => {
-  const omit = (
-    responseObject: { [x: string]: any },
-    responseObjectProps: any[],
-  ) => {
-    responseObject = { ...responseObject };
-    responseObjectProps.forEach((prop) => delete responseObject[prop]);
-    return responseObject;
-  };
-
   const newResponseObject: Record<string, unknown> = {};
   const attributeKeys = Object.keys(
     omit(responseObject, [
@@ -200,11 +194,10 @@ const sanitizeRequestObject = (
   user: any,
   currentKey?: string,
 ) => {
-  delete request['code'];
-  delete request['secret'];
-  delete request['createdBy'];
   const newResponseObject: Record<string, unknown> = {};
-  const attributeKeys = Object.keys(request);
+  const attributeKeys = Object.keys(
+    omit(request, ['lastLogin', 'createdBy', 'secret']),
+  );
 
   attributeKeys.forEach((attributeKey) => {
     let attributeValue: string | boolean | number | any;

@@ -5,6 +5,7 @@ import {
   Form,
   Objective,
   OrganisationUnit,
+  Phone,
   Privilege,
   Process,
   Role,
@@ -30,4 +31,5 @@ export const schemaEntities = [
   Field,
   Section,
   EnrollmentStage,
+  Phone,
 ];

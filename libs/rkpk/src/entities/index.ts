@@ -12,3 +12,4 @@ export * from './metadata/field.entity';
 export * from './metadata/form.entity';
 export * from './metadata/section.entity';
 export * from './data/enrollment.stage.entity';
+export * from './data/phone.entity';

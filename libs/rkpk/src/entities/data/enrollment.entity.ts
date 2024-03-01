@@ -11,6 +11,7 @@ import {
 import { DateEntity } from '../general/date.entity';
 import { Objective } from './objective.entity';
 import { EnrollmentStage, Field } from '..';
+import { Phone } from './phone.entity';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -38,6 +39,13 @@ export class Enrollment extends DateEntity {
     onUpdate: 'CASCADE',
   })
   stages: EnrollmentStage[];
+
+  @OneToMany(() => Phone, (phone) => phone.enrollment, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  phones: Phone[];
 
   @ManyToMany(() => Field, (field) => field, {
     nullable: false,
