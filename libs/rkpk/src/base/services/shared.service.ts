@@ -393,7 +393,7 @@ export class SharedService<T extends BaseEntity> {
   fields = (user: User) => {
     const AUTHORITIES = USERAUTHORITIES(user);
     if (
-      AUTHORITIES?.includes(this.entity['DELETE']) ||
+      AUTHORITIES?.includes(this.entity['READ']) ||
       AUTHORITIES?.includes('ALL')
     )
       return this.repository.metadata.columns
@@ -482,7 +482,7 @@ export class SharedService<T extends BaseEntity> {
   };
   deleteEntity = async (id: string): Promise<void> => {
     try {
-      await this.repository.delete(id);
+      await this.repository.softDelete(id);
     } catch (e) {
       this.sanitizeDeleteError(e);
     }
@@ -623,7 +623,10 @@ export class SharedService<T extends BaseEntity> {
     delete payload['createdBy'];
     delete payload['user'];
     const sanitizedPayload = await this.sanitizePayload(payload);
-    payload = this.repository.create(payload);
+    payload = this.repository.create({
+      ...sanitizedPayload,
+      updated: new Date().toISOString(),
+    });
     await this.repository.save(sanitizedPayload);
     const updatedPayload = await this.findOneOrFailInternal({
       id: payload['id'],

@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -22,6 +23,10 @@ export class DateEntity extends BaseEntity {
   @UpdateDateColumn()
   @ApiPropertyOptional()
   updated: Date;
+
+  @DeleteDateColumn()
+  @ApiPropertyOptional()
+  deleted: Date;
 
   @Column({ nullable: true, unique: true })
   @ApiPropertyOptional()

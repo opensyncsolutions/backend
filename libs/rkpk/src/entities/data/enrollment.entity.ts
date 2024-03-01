@@ -24,6 +24,69 @@ export class Enrollment extends DateEntity {
   @Column({ default: 'CONTROL' })
   status: 'CONTROL' | 'INTERVENTION';
 
+  @Column({ name: 'studyid', nullable: true })
+  studyID: string;
+
+  @Column({ name: 'ctcid' })
+  ctcId: string;
+
+  @Column({ name: 'recentvisit', nullable: true })
+  recentVisit: Date;
+
+  @Column({ default: false, name: 'participantconsent' })
+  participantConsent: boolean;
+
+  @Column({ default: false, name: 'informedconsent' })
+  informedConsent: boolean;
+
+  @Column({ default: false, name: 'fundsconfirmation' })
+  fundsConfirmation: boolean;
+
+  @Column({ nullable: true })
+  landmark: string;
+
+  @Column({ nullable: true })
+  village: string;
+
+  @Column({ nullable: true, name: 'middlename' })
+  middleName: string;
+
+  @Column({ nullable: true, name: 'nickname' })
+  nickName: string;
+
+  @Column({ nullable: true, name: 'mothername' })
+  motherName: string;
+
+  @Column({ nullable: true, name: 'hbcname' })
+  hbcName: string;
+
+  @Column({ nullable: true, name: 'hbcnumber' })
+  hbcNumber: string;
+
+  @Column({ name: 'firstname' })
+  firstName: string;
+
+  @Column()
+  surname: string;
+
+  @Column()
+  dob: Date;
+
+  @Column({ nullable: true, name: 'enrollmentdate' })
+  enrollmentDate: Date;
+
+  @Column({ nullable: true, name: 'screeningid' })
+  screeningId: Date;
+
+  @Column({ nullable: true })
+  appointment: Date;
+
+  @Column({ nullable: true, name: 'scheduledreturn' })
+  scheduledReturn: Date;
+
+  @Column()
+  gender: 'Male' | 'Female';
+
   @ManyToOne(() => Objective, (objective) => objective, {
     nullable: false,
     cascade: false,
