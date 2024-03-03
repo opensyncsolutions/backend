@@ -9,6 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
 import { FormModule } from './modules/form/form.module';
+import { PhoneModule } from './modules/phone/phone.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FormModule } from './modules/form/form.module';
     EnrollmentModule,
     ObjectiveModule,
     FormModule,
+    PhoneModule,
   ],
   controllers: [AppController],
 })

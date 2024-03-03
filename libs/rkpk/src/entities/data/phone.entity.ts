@@ -12,10 +12,10 @@ import { Enrollment } from './enrollment.entity';
 @Entity('phone')
 export class Phone extends BaseEntity {
   static plural = 'phones';
-  static READ: string;
-  static ADD: string;
-  static DELETE: string;
-  static UPDATE: string;
+  static READ: string = 'READ_PHONES';
+  static ADD: string = 'ADD_PHONES';
+  static DELETE: string = 'DELETE_PHONES';
+  static UPDATE: string = 'UPDATE_PHONES';
 
   @PrimaryGeneratedColumn('uuid')
   id: string;
