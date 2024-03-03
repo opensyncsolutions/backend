@@ -36,6 +36,10 @@ export class OrganisationUnit extends NameEntity {
   @ApiPropertyOptional()
   level: number;
 
+  @Column({ default: false })
+  @ApiPropertyOptional()
+  data: boolean;
+
   @TreeChildren()
   @ApiPropertyOptional({ type: [OrganisationUnit] })
   children: OrganisationUnit[];
@@ -54,6 +58,20 @@ export class OrganisationUnit extends NameEntity {
       if (!parent)
         throw new BadRequestException('Missing organisationUnit parent');
 
+      this.level = parent.level + 1;
+    }
+
+    if (!this.parent?.id && APPENV.ALLOWROOTS) {
+      this.level = 1;
+    }
+
+    if (this.parent?.id && !this.level) {
+      const parent = await OrganisationUnit.findOne({
+        where: { id: this.parent?.id },
+      });
+
+      if (!parent)
+        throw new BadRequestException('Missing organisationUnit parent');
       this.level = parent.level + 1;
     }
   }

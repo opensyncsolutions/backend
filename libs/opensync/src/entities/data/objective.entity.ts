@@ -1,7 +1,9 @@
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BeforeInsert, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { NameEntity } from '../general/named.entity';
 import { OrganisationUnit } from '../metadata/organisationUnit.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { throwError } from '../../helpers';
+import { NotFoundException } from '@nestjs/common';
 
 @Entity('objective', { schema: 'public' })
 export class Objective extends NameEntity {
@@ -19,4 +21,23 @@ export class Objective extends NameEntity {
   @JoinColumn({ name: 'ou', referencedColumnName: 'id' })
   @ApiProperty({ type: OrganisationUnit })
   organisationUnit: OrganisationUnit;
+
+  @BeforeInsert()
+  async beforeInsert() {
+    const ou = await OrganisationUnit.findOne({
+      where: { id: this.organisationUnit.id },
+    });
+
+    if (!ou) {
+      throwError(new NotFoundException('Organisation Unit could not be found'));
+    }
+
+    if (!ou.data || !ou.active) {
+      throwError(
+        new NotFoundException(
+          `Organisation Unit ${!ou.data ? 'does not allow data entry' : 'is not currently active for data entry'}`,
+        ),
+      );
+    }
+  }
 }
