@@ -274,11 +274,10 @@ export class SharedService<T extends BaseEntity> {
     if (entity['id']) {
       await this.repository.save({
         id: id,
-        assets: entity['assets']
-          ? [...entity['assets'], `${file.filename}_____${file.mimetype}`]
-          : [`${file.filename}_____${file.mimetype}`],
+        assets: file.filename,
         updatedBy: { id: user.id },
       } as unknown as T);
+      this.deleteFile(`${ASSETS}/${id}/${entity['assets']}`);
 
       return {
         path: `/api/${this.entity['plural']}/${file.filename}/assets?id=${id}`,
@@ -697,7 +696,7 @@ export class SharedService<T extends BaseEntity> {
       );
   };
 
-  private checkIfValidUUID(identifier: string): 'id' | 'phoneNumber' {
+  private checkIfValidUUID(identifier: string): 'id' {
     const validId = isUUID(identifier);
     if (validId) return 'id';
     this.throwGenericError(new BadRequestException('ID not valid'));

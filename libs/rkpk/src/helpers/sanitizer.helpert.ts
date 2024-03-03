@@ -172,16 +172,8 @@ const sanitizeObject = (responseObject: any, resource: string) => {
         newResponseObject[attributeKey] =
           `/api/users/${attributeValue}/dps?id=${responseObject.id}`;
       } else if (attributeKey === 'assets') {
-        newResponseObject[attributeKey] = (attributeValue ?? []).map(
-          (attribute: string) => {
-            const file = attribute?.split('_____');
-            return {
-              name: file[0],
-              type: file[1],
-              url: `/api/${resource}/${file[0]}/assets?id=${responseObject.id}`,
-            };
-          },
-        );
+        newResponseObject[attributeKey] =
+          `/api/${resource}/${attributeValue}/assets?id=${responseObject.id}`;
       } else {
         newResponseObject[attributeKey] = attributeValue;
       }

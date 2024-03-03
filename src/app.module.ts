@@ -10,6 +10,7 @@ import { EnrollmentModule } from './modules/enrollment/enrollment.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
 import { FormModule } from './modules/form/form.module';
 import { PhoneModule } from './modules/phone/phone.module';
+import { NetworkModule } from './modules/network/network.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PhoneModule } from './modules/phone/phone.module';
     ObjectiveModule,
     FormModule,
     PhoneModule,
+    NetworkModule,
   ],
   controllers: [AppController],
 })
