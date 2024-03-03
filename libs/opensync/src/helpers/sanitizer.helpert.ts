@@ -139,7 +139,17 @@ export const errorSanitizer = (error: {
   return message.includes('"') ? message?.split('"').join('') : message;
 };
 
-const sanitizeObject = (responseObject: any, resource: string) => {
+const selectedFields = (fields: string, key: string): boolean => {
+  if (!fields || fields === '*') return true;
+  return fields.split(',').find((field) => field.includes(key)) !== undefined;
+};
+
+const sanitizeObject = (
+  responseObject: any,
+  resource: string,
+  fields: string,
+  validate: boolean,
+) => {
   const newResponseObject: Record<string, unknown> = {};
   const attributeKeys = Object.keys(
     omit(responseObject, [
@@ -156,13 +166,15 @@ const sanitizeObject = (responseObject: any, resource: string) => {
       if (typeof attributeValue === 'object' && attributeKey !== 'assets') {
         if (Array.isArray(attributeValue)) {
           newResponseObject[attributeKey] = responseObject[attributeKey].map(
-            (value: any) => sanitizeResponse(value, resource),
+            (value: any) => sanitizeResponse(value, resource, fields, false),
           );
         } else {
           if (isNaN(Date.parse(attributeValue))) {
             newResponseObject[attributeKey] = sanitizeResponse(
               attributeValue,
               resource,
+              fields,
+              false,
             );
           } else {
             newResponseObject[attributeKey] = attributeValue;
@@ -177,6 +189,9 @@ const sanitizeObject = (responseObject: any, resource: string) => {
       } else {
         newResponseObject[attributeKey] = attributeValue;
       }
+    }
+    if (validate && !selectedFields(fields, attributeKey)) {
+      delete newResponseObject[attributeKey];
     }
   });
   return newResponseObject;
@@ -254,11 +269,15 @@ const sanitizeRequestObject = (
 export const sanitizeResponse: any = (
   responseObject: any,
   resource: string,
+  fields: string,
+  validate: boolean,
 ) => {
   if (Array.isArray(responseObject)) {
-    return responseObject.map((response) => sanitizeObject(response, resource));
+    return responseObject.map((response) =>
+      sanitizeObject(response, resource, fields, validate),
+    );
   }
-  return sanitizeObject(responseObject, resource);
+  return sanitizeObject(responseObject, resource, fields, validate);
 };
 export const sanitizeRequest: any = (
   request: any,

@@ -24,8 +24,12 @@ export class Objective extends NameEntity {
 
   @BeforeInsert()
   async beforeInsert() {
+    if (!this.organisationUnit?.id) {
+      throwError(new NotFoundException('Organisation Unit cannot be null'));
+    }
+
     const ou = await OrganisationUnit.findOne({
-      where: { id: this.organisationUnit.id },
+      where: { id: this.organisationUnit?.id },
     });
 
     if (!ou) {

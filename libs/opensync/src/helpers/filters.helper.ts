@@ -1,4 +1,4 @@
-import { BadRequestException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import {
   Between,
   EntityMetadata,
@@ -35,7 +35,7 @@ const hasIdKey = (obj: { [x: string]: any }) => {
 };
 
 const sortFields = (fields: string, metaData: EntityMetadata) => {
-  return fields?.split(',').filter(
+  return [...new Set([...fields?.split(','), 'created', 'id'])].filter(
     (item: string) =>
       item?.indexOf('[') === -1 &&
       metaData.columns
@@ -55,9 +55,6 @@ const getRelations = (fields: string[], metaData: EntityMetadata): string[] => {
   return relation;
 };
 const verifyFields = (fields: any) => {
-  if (!fields) {
-    throw new BadRequestException('Missing selectors');
-  }
   if (typeof fields !== 'string') {
     throw new Error(
       `[Fields] Expected a string but received an ${typeof fields}.`,
@@ -216,9 +213,7 @@ export const select = (fields: any, metaData: EntityMetadata): any => {
   if (fields === '*') {
     return null;
   }
-  // const relations = metaData.relations.map((relation) => relation.propertyPath);
   return sortFields(fields, metaData);
-  //{ id: true, metadata: { id: true } };
 };
 
 const getORFIlter = (

@@ -81,14 +81,13 @@ export class SharedService<T extends BaseEntity> {
   };
 
   save = async (payload: T): Promise<T> => {
-    delete payload['created'];
-    delete payload['updated'];
-    delete payload['dp'];
-    delete payload['level'];
     const script = payload['script'];
+    const query = payload['query'];
     delete payload['script'];
+    delete payload['query'];
     payload = sanitizeRequest(payload, payload['user']);
     payload['script'] = script;
+    payload['query'] = query;
     if (payload['update']) {
       return await this.update(payload);
     }
@@ -311,8 +310,6 @@ export class SharedService<T extends BaseEntity> {
       delete data['updated'];
       delete data['dp'];
       delete data['level'];
-      delete data['code_path'];
-
       const sanitizedSummary = await this.checkExistingEntity(
         data,
         user,
@@ -619,8 +616,10 @@ export class SharedService<T extends BaseEntity> {
       id: payload['id'],
     });
     this.validateSystemEntity(existingRecord, payload);
+    const query = payload['query'];
     delete payload['createdBy'];
     delete payload['user'];
+    delete payload['query'];
     const sanitizedPayload = await this.sanitizePayload(payload);
     payload = this.repository.create({
       ...sanitizedPayload,
@@ -629,6 +628,8 @@ export class SharedService<T extends BaseEntity> {
     await this.repository.save(sanitizedPayload);
     const updatedPayload = await this.findOneOrFailInternal({
       id: payload['id'],
+      fields: query.fields,
+      filter: query.filters,
     });
     delete updatedPayload['password'];
     this.runProcess({
@@ -648,9 +649,15 @@ export class SharedService<T extends BaseEntity> {
   };
 
   createNewEntity = async (payload: T): Promise<T> => {
+    const query = payload['query'];
+    delete payload['query'];
     const record = this.repository.create(payload);
     let newRecord = await this.repository.save(record);
-    newRecord = await this.findOneOrFailInternal({ id: newRecord['id'] });
+    newRecord = await this.findOneOrFailInternal({
+      id: newRecord['id'],
+      fields: query.fields,
+      filter: query.filter,
+    });
     this.runProcess({
       code: 'POST_CREATE',
       payload: { ...newRecord, ...payload } as T,

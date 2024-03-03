@@ -51,7 +51,12 @@ export class SharedController<T extends BaseEntity> {
   }
   @UseGuards(SessionGuard)
   @Post()
-  async create(@Body() payload: T, @Res() res: any, @Req() req: any) {
+  async create(
+    @Body() payload: T,
+    @Res() res: any,
+    @Req() req: any,
+    @Query() query: any,
+  ) {
     this.service.validate(payload);
     try {
       const record = await this.service.save({
@@ -60,6 +65,7 @@ export class SharedController<T extends BaseEntity> {
           id: req?.session?.user?.id,
         },
         user: req.session.user,
+        query,
       });
       return res
         .status(HttpStatus.CREATED)
@@ -92,9 +98,15 @@ export class SharedController<T extends BaseEntity> {
       include: query.include,
       userGroup: query.userGroup,
     });
-    return res
-      .status(HttpStatus.OK)
-      .send(sanitizeResponse(record, this.entity['plural']));
+    return res.status(HttpStatus.OK).send({
+      ...record,
+      [this.entity['plural']]: sanitizeResponse(
+        record[this.entity['plural']],
+        this.entity['plural'],
+        query.fields,
+        true,
+      ),
+    });
   }
   @UseGuards(SessionGuard)
   @Get('downloads')
@@ -142,6 +154,8 @@ export class SharedController<T extends BaseEntity> {
         sanitizeResponse(
           this.service.fields(req.session.user),
           this.entity['plural'],
+          '*',
+          false,
         ),
       );
   }
@@ -165,7 +179,9 @@ export class SharedController<T extends BaseEntity> {
 
     return res
       .status(HttpStatus.OK)
-      .send(sanitizeResponse(record, this.entity['plural']));
+      .send(
+        sanitizeResponse(record, this.entity['plural'], query.fields, true),
+      );
   }
 
   @UseGuards(SessionGuard)
@@ -173,6 +189,7 @@ export class SharedController<T extends BaseEntity> {
   async updateOne(
     @Res() res: any,
     @Req() req: any,
+    @Query() query: any,
     @Param('id') id: string,
     @Body() payload: T,
   ): Promise<T> {
@@ -185,11 +202,19 @@ export class SharedController<T extends BaseEntity> {
       id,
       updatedBy: { id: req?.session?.user?.id },
       user: req.session.user,
+      query,
     });
     deleteFile(`${TEMPFILES}/${id}.pdf`);
     return res
       .status(HttpStatus.OK)
-      .send(sanitizeResponse(updatedRecord, this.entity['plural']));
+      .send(
+        sanitizeResponse(
+          updatedRecord,
+          this.entity['plural'],
+          query.fields,
+          true,
+        ),
+      );
   }
 
   @UseGuards(SessionGuard)

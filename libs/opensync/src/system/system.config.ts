@@ -68,11 +68,11 @@ export const SYSTEM = async () => {
   });
 
   await OrganisationUnit.createTree({
-    name: 'Root',
-    shortName: 'Root',
-    description: 'Root',
+    name: 'OpenSync',
+    shortName: 'OpenSync',
+    description: 'OpenSync',
     id: '6269df23-f8a0-4776-bd89-3015521bc19d',
-    code: '0001-ROOT',
+    code: '0001-OPENSYNC',
     level: 1,
     createdBy: { id: '6269df23-f8a0-4776-bd89-3015521bc19d' },
   });
