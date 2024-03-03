@@ -1,4 +1,4 @@
-import { SharedController, Form } from '@app/rkpk';
+import { SharedController, Form } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { FormService } from '../services/form.service';
 

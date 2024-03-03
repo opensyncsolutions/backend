@@ -32,7 +32,7 @@ export class User extends DateEntity {
   @ApiPropertyOptional({ nullable: true })
   username: string;
 
-  @Column({ nullable: true, default: 'default__rkpk_dp.png' })
+  @Column({ nullable: true, default: 'default__opensync_dp.png' })
   @ApiPropertyOptional({ nullable: true })
   dp: string;
 

@@ -1,4 +1,4 @@
-import { SharedController, Enrollment } from '@app/rkpk';
+import { SharedController, Enrollment } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { EnrollmentService } from '../services/enrollment.service';
 

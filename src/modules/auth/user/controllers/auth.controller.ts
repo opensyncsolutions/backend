@@ -16,7 +16,7 @@ import {
   Login,
   SessionGuard,
   AuthGuard,
-} from '@app/rkpk';
+} from '@app/opensync';
 import { UserService } from '../services/user.service';
 
 @Controller('api')

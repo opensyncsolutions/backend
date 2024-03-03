@@ -60,7 +60,7 @@ export const SYSTEM = async () => {
     name: 'Admin',
     username: 'admin',
     phoneNumber: '123456789',
-    email: 'admin@rkpk.com',
+    email: 'admin@opensync.com',
     password: '$2b$10$RvNNdflLzhnEFxBFk47XPeGPMRCM.Bqal2A3s0eE45vJejpuvOknC',
     salt: '$2b$10$RvNNdflLzhnEFxBFk47XPe',
     canLogin: true,
@@ -126,7 +126,7 @@ export const APPENV = {
     | 'development'
     | 'test'
     | 'production',
-  COOKIE_SECRET: process.env.COOKIE_SECRET || 'RKPK@12!AFYA!!',
+  COOKIE_SECRET: process.env.COOKIE_SECRET || 'opensync@12!AFYA!!',
   TEMPFILES: TEMPFILES,
   ASSETS: ASSETS,
   SYSTEMPATH: SYSTEMPATH,

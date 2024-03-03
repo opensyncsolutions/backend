@@ -1,4 +1,4 @@
-import { SharedController, Field } from '@app/rkpk';
+import { SharedController, Field } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { FieldService } from '../services/field.service';
 

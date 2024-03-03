@@ -1,4 +1,4 @@
-import { SharedController, Network } from '@app/rkpk';
+import { SharedController, Network } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { NetworkService } from '../services/network.service';
 

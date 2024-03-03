@@ -1,4 +1,4 @@
-import { SharedController, Privilege } from '@app/rkpk';
+import { SharedController, Privilege } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { PrivilegeService } from '../services/privilege.service';
 

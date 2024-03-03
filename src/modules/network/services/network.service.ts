@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TreeRepository } from 'typeorm';
-import { Network, SharedService } from '@app/rkpk';
+import { Network, SharedService } from '@app/opensync';
 
 @Injectable()
 export class NetworkService extends SharedService<Network> {

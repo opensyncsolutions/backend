@@ -1,4 +1,4 @@
-import { Network } from '@app/rkpk';
+import { Network } from '@app/opensync';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NetworkController } from './controllers/network.controller';

@@ -1,5 +1,5 @@
 {
-  "name": "rkpk",
+  "name": "opensync",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -93,7 +93,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/rkpk(|/.*)$": "<rootDir>/libs/rkpk/src/$1"
+      "^@app/opensync(|/.*)$": "<rootDir>/libs/opensync/src/$1"
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Field, Form, Section } from '@app/rkpk';
+import { Field, Form, Section } from '@app/opensync';
 import { FormController } from './controllers/form.controller';
 import { FormService } from './services/form.service';
 import { FieldController } from './controllers/field.controller';

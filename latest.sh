@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USERNAME="flexcodelabs"
-REPO="rkpk-releases"
+REPO="opensync-releases"
 
 # Set the output folder
 OUTPUT_FOLDER="./files"

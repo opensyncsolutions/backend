@@ -17,7 +17,7 @@ import {
   User,
   imageFileFilter,
   originalNames,
-} from '@app/rkpk';
+} from '@app/opensync';
 import { UserService } from '../services/user.service';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -64,7 +64,7 @@ export class UserController extends SharedController<User> {
 
   @Get(':dp/dps')
   getDp(@Param('dp') dp: string, @Res() res: any, @Query() query: any) {
-    if (dp === 'default__rkpk_dp.png') {
+    if (dp === 'default__opensync_dp.png') {
       return res.sendFile(dp, {
         root: `./`,
       });
@@ -75,7 +75,7 @@ export class UserController extends SharedController<User> {
       });
     }
 
-    return res.sendFile('default__rkpk_dp.png', {
+    return res.sendFile('default__opensync_dp.png', {
       root: `./`,
     });
   }

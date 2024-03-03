@@ -31,7 +31,7 @@ ENV TZ Africa/Dar_es_Salaam
 WORKDIR /app
 COPY --from=build /app/dist/ ./
 COPY --from=build /app/node_modules/ ./node_modules
-COPY --from=build /app/default__rkpk_dp.png/ ./default__rkpk_dp.png
+COPY --from=build /app/default__opensync_dp.png/ ./default__opensync_dp.png
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD curl -f http://localhost:${SERVER_PORT}/api/status || exit 1
 EXPOSE ${SERVER_PORT}

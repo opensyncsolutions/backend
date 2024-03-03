@@ -1,4 +1,4 @@
-import { SharedController, Phone } from '@app/rkpk';
+import { SharedController, Phone } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { PhoneService } from '../services/phone.service';
 

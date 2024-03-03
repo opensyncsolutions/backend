@@ -18,11 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/rkpk": [
-        "libs/rkpk/src"
+      "@app/opensync": [
+        "libs/opensync/src"
       ],
-      "@app/rkpk/*": [
-        "libs/rkpk/src/*"
+      "@app/opensync/*": [
+        "libs/opensync/src/*"
       ]
     }
   }

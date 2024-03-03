@@ -8,7 +8,7 @@ import {
   PORT,
   SYSTEM,
   schemaEntities,
-} from '@app/rkpk';
+} from '@app/opensync';
 import * as session from 'express-session';
 import { createClient } from 'redis';
 import * as passport from 'passport';
@@ -55,7 +55,7 @@ async function bootstrap() {
   app.use(passport.session());
 
   const config = new DocumentBuilder()
-    .setTitle('RKPK')
+    .setTitle('opensync')
     .setVersion('1.0')
     .build();
 

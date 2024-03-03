@@ -7,7 +7,7 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "@app/rkpk/(.*)": "<rootDir>/../libs/rkpk/src/$1",
-    "@app/rkpk": "<rootDir>/../libs/rkpk/src"
+    "@app/opensync/(.*)": "<rootDir>/../libs/opensync/src/$1",
+    "@app/opensync": "<rootDir>/../libs/opensync/src"
   }
 }

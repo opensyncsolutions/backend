@@ -1,4 +1,4 @@
-import { SharedController, Section } from '@app/rkpk';
+import { SharedController, Section } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { SectionService } from '../services/section.service';
 

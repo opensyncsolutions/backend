@@ -1,2 +1,2 @@
-docker build -t baharajr/rkpk .
-docker push baharajr/rkpk:latest
+docker build -t baharajr/opensync .
+docker push baharajr/opensync:latest

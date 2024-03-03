@@ -1,4 +1,4 @@
-import { Phone } from '@app/rkpk';
+import { Phone } from '@app/opensync';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhoneController } from './controllers/phone.controller';

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Enrollment, EnrollmentStage } from '@app/rkpk';
+import { Enrollment, EnrollmentStage } from '@app/opensync';
 import { EnrollmentController } from './controllers/enrollment.controller';
 import { EnrollmentService } from './services/enrollment.service';
 import { EnrollmentStageController } from './controllers/enrollmentstage.controller';

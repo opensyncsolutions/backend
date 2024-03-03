@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TreeRepository } from 'typeorm';
-import { Section, SharedService } from '@app/rkpk';
+import { Section, SharedService } from '@app/opensync';
 
 @Injectable()
 export class SectionService extends SharedService<Section> {

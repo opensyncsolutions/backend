@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Privilege, Role, User } from '@app/rkpk';
+import { Privilege, Role, User } from '@app/opensync';
 import { UserController } from './user/controllers/user.controller';
 import { UserService } from './user/services/user.service';
 import { AuthController } from './user/controllers/auth.controller';

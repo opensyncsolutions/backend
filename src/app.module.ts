@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CLIENT, DB, schemaEntities } from '@app/rkpk';
+import { CLIENT, DB, schemaEntities } from '@app/opensync';
 import { AuthModule } from './modules/auth/auth.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { join } from 'path';
