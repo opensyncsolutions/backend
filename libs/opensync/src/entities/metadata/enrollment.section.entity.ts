@@ -11,7 +11,7 @@ import { Field, Form } from '..';
 import { DateEntity } from '../general/date.entity';
 
 @Entity('section')
-export class Section extends DateEntity {
+export class EnrollmentSection extends DateEntity {
   static plural = 'sections';
   static READ = 'READ_SECTIONS';
   static ADD = 'ADD_SECTIONS';

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TreeRepository } from 'typeorm';
-import { Section, SharedService } from '@app/opensync';
+import { EnrollmentSection, SharedService } from '@app/opensync';
 
 @Injectable()
-export class SectionService extends SharedService<Section> {
+export class SectionService extends SharedService<EnrollmentSection> {
   constructor(
-    @InjectRepository(Section)
-    repository: TreeRepository<Section>,
+    @InjectRepository(EnrollmentSection)
+    repository: TreeRepository<EnrollmentSection>,
   ) {
-    super(repository, Section);
+    super(repository, EnrollmentSection);
   }
 }
