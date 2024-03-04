@@ -7,11 +7,13 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Objective } from './objective.entity';
 import { EnrollmentStage, Field } from '..';
 import { Phone } from './phone.entity';
+import { Followup } from './followup.entity';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -123,4 +125,9 @@ export class Enrollment extends DateEntity {
   })
   @ApiPropertyOptional({ type: [Field] })
   fields: Field[];
+
+  @OneToOne(() => Followup, (followup) => followup.enrollment, {
+    cascade: true,
+  })
+  followup: Followup;
 }

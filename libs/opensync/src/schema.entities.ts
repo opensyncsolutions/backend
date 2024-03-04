@@ -15,6 +15,7 @@ import {
   Task,
   User,
   UserGroup,
+  Followup,
 } from './entities';
 
 export const schemaEntities = [
@@ -34,4 +35,5 @@ export const schemaEntities = [
   EnrollmentStage,
   Phone,
   Network,
+  Followup,
 ];

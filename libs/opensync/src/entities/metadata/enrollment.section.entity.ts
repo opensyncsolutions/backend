@@ -22,7 +22,7 @@ export class EnrollmentSection extends DateEntity {
   @ApiPropertyOptional()
   translations: any;
 
-  @ManyToOne(() => Form, (form) => form, {
+  @ManyToOne(() => Form, (form) => form.sections, {
     nullable: false,
     cascade: false,
     eager: false,

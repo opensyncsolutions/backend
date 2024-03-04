@@ -1,7 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { NameEntity } from '../general/named.entity';
 import { Field } from './field.entity';
+import { EnrollmentSection } from './enrollment.section.entity';
 
 @Entity('form')
 export class Form extends NameEntity {
@@ -28,4 +29,11 @@ export class Form extends NameEntity {
   })
   @ApiPropertyOptional({ type: [Field] })
   fields: Field[];
+
+  @OneToMany(() => EnrollmentSection, (section) => section.form, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  sections: EnrollmentSection[];
 }

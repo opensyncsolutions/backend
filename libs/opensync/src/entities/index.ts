@@ -14,3 +14,4 @@ export * from './metadata/enrollment.section.entity';
 export * from './data/enrollment.stage.entity';
 export * from './data/phone.entity';
 export * from './metadata/mobile.network.entity';
+export * from './data/followup.entity';
