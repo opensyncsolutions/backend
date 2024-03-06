@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   BloodCollection,
+  DataCollection,
   Disbursement,
   Enrollment,
   EnrollmentStage,
@@ -17,6 +18,8 @@ import { DisbursementController } from './controllers/disbursement.controller';
 import { DisbursementService } from './services/disbursement.service';
 import { BloodCollectionController } from './controllers/bloodcollection.controller';
 import { BloodCollectionService } from './services/bloodcollection.service';
+import { DataCollectionController } from './controllers/datacollection.controller';
+import { DataCollectionService } from './services/datacollection.service';
 
 @Module({
   imports: [
@@ -26,6 +29,7 @@ import { BloodCollectionService } from './services/bloodcollection.service';
       Followup,
       Disbursement,
       BloodCollection,
+      DataCollection,
     ]),
   ],
   controllers: [
@@ -34,6 +38,7 @@ import { BloodCollectionService } from './services/bloodcollection.service';
     FollowupController,
     DisbursementController,
     BloodCollectionController,
+    DataCollectionController,
   ],
   providers: [
     EnrollmentService,
@@ -41,6 +46,7 @@ import { BloodCollectionService } from './services/bloodcollection.service';
     FollowupService,
     DisbursementService,
     BloodCollectionService,
+    DataCollectionService,
   ],
 })
 export class EnrollmentModule {}

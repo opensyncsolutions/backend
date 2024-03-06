@@ -18,6 +18,7 @@ import { Followup } from './followup.entity';
 import { Disbursement } from './disbursement.entity';
 import { throwError } from '../../helpers';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { DataCollection } from './datacollection.entity';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -161,6 +162,15 @@ export class Enrollment extends DateEntity {
     cascade: true,
   })
   followup: Followup;
+
+  @OneToOne(
+    () => DataCollection,
+    (dataCollection) => dataCollection.enrollment,
+    {
+      cascade: true,
+    },
+  )
+  dataCollection: DataCollection;
 
   @BeforeInsert()
   async beforeInsert() {

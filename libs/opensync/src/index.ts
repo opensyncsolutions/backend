@@ -8,3 +8,4 @@ export * from './guards/session.guard';
 export * from './guards/auth.guard';
 export * from './base/index';
 export * from './models/login.model';
+export * from './enums/data.collection.enum';

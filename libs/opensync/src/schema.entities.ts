@@ -18,6 +18,7 @@ import {
   Followup,
   Disbursement,
   BloodCollection,
+  DataCollection,
 } from './entities';
 
 export const schemaEntities = [
@@ -40,4 +41,5 @@ export const schemaEntities = [
   Followup,
   Disbursement,
   BloodCollection,
+  DataCollection,
 ];
