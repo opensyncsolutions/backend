@@ -17,6 +17,7 @@ import {
   UserGroup,
   Followup,
   Disbursement,
+  BloodCollection,
 } from './entities';
 
 export const schemaEntities = [
@@ -38,4 +39,5 @@ export const schemaEntities = [
   Network,
   Followup,
   Disbursement,
+  BloodCollection,
 ];

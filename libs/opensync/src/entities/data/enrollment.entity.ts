@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Objective } from './objective.entity';
-import { EnrollmentStage, Field } from '..';
+import { BloodCollection, EnrollmentStage, Field } from '..';
 import { Phone } from './phone.entity';
 import { Followup } from './followup.entity';
 import { Disbursement } from './disbursement.entity';
@@ -112,6 +112,17 @@ export class Enrollment extends DateEntity {
     onUpdate: 'CASCADE',
   })
   disbursements: Disbursement[];
+
+  @OneToMany(
+    () => BloodCollection,
+    (bloodCollection) => bloodCollection.enrollment,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
+  )
+  bloodCollections: BloodCollection[];
 
   @OneToMany(() => Phone, (phone) => phone.enrollment, {
     cascade: true,
