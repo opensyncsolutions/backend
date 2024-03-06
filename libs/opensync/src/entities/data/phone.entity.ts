@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   BaseEntity,
   Column,
@@ -18,24 +18,28 @@ export class Phone extends BaseEntity {
   static UPDATE: string = 'UPDATE_PHONES';
 
   @PrimaryGeneratedColumn('uuid')
+  @ApiPropertyOptional()
   id: string;
 
   @Column()
+  @ApiProperty()
   phone: string;
 
   @Column()
+  @ApiProperty()
   network: string;
 
   @Column({ default: true })
+  @ApiPropertyOptional()
   personal: boolean;
 
   @Column({ nullable: true })
+  @ApiPropertyOptional()
   name: string;
 
   @ManyToOne(() => Enrollment, (enrollment) => enrollment, {
     nullable: false,
     cascade: false,
-    eager: false,
   })
   @JoinColumn({ name: 'enrollment', referencedColumnName: 'id' })
   @ApiProperty({ type: Enrollment })

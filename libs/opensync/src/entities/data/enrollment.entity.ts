@@ -19,6 +19,7 @@ import { Disbursement } from './disbursement.entity';
 import { throwError } from '../../helpers';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { DataCollection } from './datacollection.entity';
+import { ENROLLMENTSTATUS, GENDER } from '../../enums/enrollment.enum';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -28,71 +29,97 @@ export class Enrollment extends DateEntity {
   static DELETE = 'DELETE_ENROLLMENTS';
   static UPDATE = 'UPDATE_ENROLLMENTS';
 
-  @Column({ default: 'CONTROL' })
-  status: 'CONTROL' | 'INTERVENTION';
+  @Column({
+    type: 'enum',
+    enum: ENROLLMENTSTATUS,
+    default: ENROLLMENTSTATUS.control,
+  })
+  @ApiPropertyOptional()
+  status: ENROLLMENTSTATUS;
 
   @Column({ name: 'studyid', nullable: true })
+  @ApiPropertyOptional()
   studyID: string;
 
   @Column({ name: 'ctcid' })
+  @ApiProperty()
   ctcId: string;
 
   @Column({ name: 'recentvisit', nullable: true })
+  @ApiPropertyOptional()
   recentVisit: Date;
 
   @Column({ default: false, name: 'participantconsent' })
+  @ApiPropertyOptional()
   participantConsent: boolean;
 
   @Column({ default: false, name: 'informedconsent' })
+  @ApiPropertyOptional()
   informedConsent: boolean;
 
   @Column({ default: false, name: 'fundsconfirmation' })
+  @ApiPropertyOptional()
   fundsConfirmation: boolean;
 
   @Column({ nullable: true })
+  @ApiPropertyOptional()
   landmark: string;
 
-  @Column({ nullable: true })
+  @Column()
+  @ApiProperty()
   village: string;
 
   @Column({ nullable: true, name: 'middlename' })
+  @ApiPropertyOptional()
   middleName: string;
 
   @Column({ nullable: true, name: 'nickname' })
+  @ApiPropertyOptional()
   nickName: string;
 
   @Column({ nullable: true, name: 'mothername' })
+  @ApiPropertyOptional()
   motherName: string;
 
   @Column({ nullable: true, name: 'hbcname' })
+  @ApiPropertyOptional()
   hbcName: string;
 
   @Column({ nullable: true, name: 'hbcnumber' })
+  @ApiPropertyOptional()
   hbcNumber: string;
 
   @Column({ name: 'firstname' })
+  @ApiProperty()
   firstName: string;
 
   @Column()
+  @ApiProperty()
   surname: string;
 
   @Column()
+  @ApiProperty()
   dob: Date;
 
   @Column({ nullable: true, name: 'enrollmentdate' })
+  @ApiPropertyOptional()
   enrollmentDate: Date;
 
   @Column({ nullable: true, name: 'screeningid' })
+  @ApiPropertyOptional()
   screeningId: Date;
 
   @Column({ nullable: true })
+  @ApiPropertyOptional()
   appointment: Date;
 
   @Column({ nullable: true, name: 'scheduledreturn' })
+  @ApiPropertyOptional()
   scheduledReturn: Date;
 
-  @Column()
-  gender: 'Male' | 'Female';
+  @Column({ type: 'enum', enum: GENDER })
+  @ApiProperty()
+  gender: GENDER;
 
   @ManyToOne(() => Objective, (objective) => objective, {
     nullable: false,

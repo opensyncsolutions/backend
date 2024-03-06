@@ -4,6 +4,8 @@ import {
   BloodCollection,
   DataCollection,
   Disbursement,
+  Eac,
+  EacSession,
   Enrollment,
   EnrollmentStage,
   Followup,
@@ -20,6 +22,10 @@ import { BloodCollectionController } from './controllers/bloodcollection.control
 import { BloodCollectionService } from './services/bloodcollection.service';
 import { DataCollectionController } from './controllers/datacollection.controller';
 import { DataCollectionService } from './services/datacollection.service';
+import { EacController } from './controllers/eac.controller';
+import { EacService } from './services/eac.service';
+import { EacSessionController } from './controllers/eacsession.controller';
+import { EacSessionService } from './services/eacsession.service';
 
 @Module({
   imports: [
@@ -30,6 +36,8 @@ import { DataCollectionService } from './services/datacollection.service';
       Disbursement,
       BloodCollection,
       DataCollection,
+      Eac,
+      EacSession,
     ]),
   ],
   controllers: [
@@ -39,6 +47,8 @@ import { DataCollectionService } from './services/datacollection.service';
     DisbursementController,
     BloodCollectionController,
     DataCollectionController,
+    EacController,
+    EacSessionController,
   ],
   providers: [
     EnrollmentService,
@@ -47,6 +57,8 @@ import { DataCollectionService } from './services/datacollection.service';
     DisbursementService,
     BloodCollectionService,
     DataCollectionService,
+    EacService,
+    EacSessionService,
   ],
 })
 export class EnrollmentModule {}

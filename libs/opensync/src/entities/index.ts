@@ -18,3 +18,5 @@ export * from './data/followup.entity';
 export * from './data/disbursement.entity';
 export * from './data/bloodcollection.entity';
 export * from './data/datacollection.entity';
+export * from './data/eac.entity';
+export * from './data/session.entity';
