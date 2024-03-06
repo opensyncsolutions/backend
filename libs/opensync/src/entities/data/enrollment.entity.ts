@@ -14,6 +14,7 @@ import { Objective } from './objective.entity';
 import { EnrollmentStage, Field } from '..';
 import { Phone } from './phone.entity';
 import { Followup } from './followup.entity';
+import { Disbursement } from './disbursement.entity';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -104,6 +105,13 @@ export class Enrollment extends DateEntity {
     onUpdate: 'CASCADE',
   })
   stages: EnrollmentStage[];
+
+  @OneToMany(() => Disbursement, (disbursement) => disbursement.enrollment, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  disbursements: Disbursement[];
 
   @OneToMany(() => Phone, (phone) => phone.enrollment, {
     cascade: true,

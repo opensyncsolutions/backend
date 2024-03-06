@@ -397,7 +397,8 @@ export class SharedService<T extends BaseEntity> {
           if (
             field.type !== 'uuid' &&
             field.propertyName !== 'created' &&
-            field.propertyName !== 'updated'
+            field.propertyName !== 'updated' &&
+            field.propertyName !== 'deleted'
           ) {
             return {
               name: field.propertyName,

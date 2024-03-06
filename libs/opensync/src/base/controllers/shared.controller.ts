@@ -146,7 +146,7 @@ export class SharedController<T extends BaseEntity> {
     });
   }
   @UseGuards(SessionGuard)
-  @Get('columns')
+  @Get('fields')
   async getFields(@Res() res: any, @Req() req: any): Promise<any[]> {
     return res
       .status(HttpStatus.OK)

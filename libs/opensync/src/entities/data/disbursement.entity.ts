@@ -1,0 +1,37 @@
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { DateEntity } from '../general/date.entity';
+import { Enrollment } from './enrollment.entity';
+import { Network } from '../metadata/mobile.network.entity';
+
+@Entity('disbursement')
+export class Disbursement extends DateEntity {
+  static plural = 'disbursements';
+  static READ = 'READ_DISBURSEMENTS';
+  static ADD = 'ADD_DISBURSEMENTS';
+  static DELETE = 'DELETE_DISBURSEMENTS';
+  static UPDATE = 'UPDATE_DISBURSEMENTS';
+
+  @ManyToOne(() => Enrollment, (enrollment) => enrollment.disbursements, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'enrollment' })
+  enrollment: Enrollment;
+
+  @ManyToOne(() => Network, (network) => network, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'mobile' })
+  mobileNetwork: Network;
+
+  @Column()
+  amount: number;
+
+  @Column({ nullable: true })
+  reference: string;
+
+  @Column({ nullable: true })
+  result: string;
+
+  @Column({ nullable: true })
+  utilityref: string;
+}
