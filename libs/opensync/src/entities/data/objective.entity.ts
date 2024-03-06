@@ -1,9 +1,9 @@
-import { BeforeInsert, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
+import { BeforeInsert, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { throwError } from '../../helpers';
 import { NameEntity } from '../general/named.entity';
 import { OrganisationUnit } from '../metadata/organisationUnit.entity';
-import { ApiProperty } from '@nestjs/swagger';
-import { throwError } from '../../helpers';
-import { NotFoundException } from '@nestjs/common';
 
 @Entity('objective', { schema: 'public' })
 export class Objective extends NameEntity {
@@ -13,35 +13,45 @@ export class Objective extends NameEntity {
   static DELETE = 'DELETE_OBJECTIVES';
   static UPDATE = 'UPDATE_OBJECTIVES';
 
-  @ManyToOne(() => OrganisationUnit, (organisationUnit) => organisationUnit, {
+  @ManyToMany(() => OrganisationUnit, (organisationUnit) => organisationUnit, {
     nullable: false,
-    cascade: false,
-    eager: false,
+    cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'ou', referencedColumnName: 'id' })
-  @ApiProperty({ type: OrganisationUnit })
-  organisationUnit: OrganisationUnit;
+  @JoinTable({
+    name: 'ojectivelocation',
+    joinColumn: { referencedColumnName: 'id', name: 'objective' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'ou' },
+  })
+  @ApiProperty()
+  organisationUnits: OrganisationUnit[];
 
   @BeforeInsert()
   async beforeInsert() {
-    if (!this.organisationUnit?.id) {
+    if (!this.organisationUnits.length) {
       throwError(new NotFoundException('Organisation Unit cannot be null'));
     }
-
-    const ou = await OrganisationUnit.findOne({
-      where: { id: this.organisationUnit?.id },
-    });
-
-    if (!ou) {
-      throwError(new NotFoundException('Organisation Unit could not be found'));
+    let messages = [];
+    for (const organisationUnit of this.organisationUnits) {
+      const ou = await OrganisationUnit.findOne({
+        where: { id: organisationUnit?.id },
+      });
+      if (!ou) {
+        messages = [
+          ...messages,
+          `Organisation Unit with ID ${organisationUnit.id} could not be found`,
+        ];
+      }
+      if (!ou.active) {
+        messages = [
+          ...messages,
+          `Organisation Unit with ID ${organisationUnit.id} is not active`,
+        ];
+      }
     }
-
-    if (!ou.data || !ou.active) {
-      throwError(
-        new NotFoundException(
-          `Organisation Unit ${!ou.data ? 'does not allow data entry' : 'is not currently active for data entry'}`,
-        ),
-      );
+    if (messages.length) {
+      throwError(new BadRequestException(messages.join(', ')));
     }
   }
 }

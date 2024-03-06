@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -11,10 +12,12 @@ import {
 } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Objective } from './objective.entity';
-import { BloodCollection, EnrollmentStage, Field } from '..';
+import { BloodCollection, EnrollmentStage, Field, OrganisationUnit } from '..';
 import { Phone } from './phone.entity';
 import { Followup } from './followup.entity';
 import { Disbursement } from './disbursement.entity';
+import { throwError } from '../../helpers';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -131,6 +134,15 @@ export class Enrollment extends DateEntity {
   })
   phones: Phone[];
 
+  @ManyToOne(() => OrganisationUnit, (organisationUnit) => organisationUnit, {
+    nullable: false,
+    cascade: false,
+    eager: false,
+  })
+  @JoinColumn({ name: 'ou', referencedColumnName: 'id' })
+  @ApiProperty({ type: OrganisationUnit })
+  organisationUnit: OrganisationUnit;
+
   @ManyToMany(() => Field, (field) => field, {
     nullable: false,
     cascade: true,
@@ -149,4 +161,39 @@ export class Enrollment extends DateEntity {
     cascade: true,
   })
   followup: Followup;
+
+  @BeforeInsert()
+  async beforeInsert() {
+    if (!this.organisationUnit?.id) {
+      throwError(new NotFoundException('Organisation Unit cannot be null'));
+    }
+
+    let messages = [];
+
+    const ou = await OrganisationUnit.findOne({
+      where: { id: this.organisationUnit?.id },
+    });
+    if (!ou) {
+      messages = [
+        ...messages,
+        `Organisation Unit with ID ${this.organisationUnit.id} could not be found`,
+      ];
+    }
+    if (!ou.active) {
+      messages = [
+        ...messages,
+        `Organisation Unit with ID ${this.organisationUnit.id} is not active`,
+      ];
+    }
+    if (!ou.data) {
+      messages = [
+        ...messages,
+        `Organisation Unit with ID ${this.organisationUnit.id} does not allow data entry`,
+      ];
+    }
+
+    if (messages.length) {
+      throwError(new BadRequestException(messages.join(', ')));
+    }
+  }
 }

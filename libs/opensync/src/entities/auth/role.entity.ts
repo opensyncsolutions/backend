@@ -26,8 +26,8 @@ export class Role extends DateEntity {
   })
   @JoinTable({
     name: 'userprivilege',
-    joinColumn: { referencedColumnName: 'id', name: 'privilege' },
-    inverseJoinColumn: { referencedColumnName: 'id', name: 'role' },
+    joinColumn: { referencedColumnName: 'id', name: 'role' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'privilege' },
   })
   @ApiProperty()
   privileges: Privilege[];
