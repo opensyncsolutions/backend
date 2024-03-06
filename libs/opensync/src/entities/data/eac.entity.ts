@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Enrollment } from './enrollment.entity';
 import { EacSession } from './session.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity('eac')
 export class Eac extends DateEntity {
@@ -15,18 +16,23 @@ export class Eac extends DateEntity {
     nullable: true,
   })
   @JoinColumn({ name: 'enrollment' })
+  @ApiProperty({ type: Enrollment })
   enrollment: Enrollment;
 
   @Column({ nullable: true, name: 'sessiondate' })
+  @ApiPropertyOptional()
   sessionDate: Date;
 
   @Column({ nullable: true, name: 'control' })
+  @ApiPropertyOptional()
   controlDate: Date;
 
   @Column({ nullable: true, name: 'intervention' })
+  @ApiPropertyOptional()
   interventionDate: Date;
 
   @Column({ nullable: true, name: 'contactstill' })
+  @ApiPropertyOptional()
   contactStill: boolean;
 
   @OneToMany(() => EacSession, (session) => session.eac, {
@@ -34,5 +40,6 @@ export class Eac extends DateEntity {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
+  @ApiPropertyOptional({ type: [EacSession] })
   sessions: EacSession[];
 }

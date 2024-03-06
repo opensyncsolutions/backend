@@ -22,6 +22,7 @@ import { NetworkModule } from './modules/network/network.module';
       type: 'postgres',
       ...DB,
       entities: [...schemaEntities],
+      // dropSchema: true,
     }),
     AuthModule,
     OrganisationUnitModule,

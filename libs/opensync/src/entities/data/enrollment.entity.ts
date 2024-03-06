@@ -1,25 +1,24 @@
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   BeforeInsert,
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { DateEntity } from '../general/date.entity';
-import { Objective } from './objective.entity';
-import { BloodCollection, EnrollmentStage, Field, OrganisationUnit } from '..';
-import { Phone } from './phone.entity';
-import { Followup } from './followup.entity';
-import { Disbursement } from './disbursement.entity';
-import { throwError } from '../../helpers';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { DataCollection } from './datacollection.entity';
+import { BloodCollection, EnrollmentStage, OrganisationUnit } from '..';
 import { ENROLLMENTSTATUS, GENDER } from '../../enums/enrollment.enum';
+import { throwError } from '../../helpers';
+import { DateEntity } from '../general/date.entity';
+import { DataCollection } from './datacollection.entity';
+import { Disbursement } from './disbursement.entity';
+import { Followup } from './followup.entity';
+import { Objective } from './objective.entity';
+import { Phone } from './phone.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -39,7 +38,7 @@ export class Enrollment extends DateEntity {
 
   @Column({ name: 'studyid', nullable: true })
   @ApiPropertyOptional()
-  studyID: string;
+  studyId: string;
 
   @Column({ name: 'ctcid' })
   @ApiProperty()
@@ -65,8 +64,8 @@ export class Enrollment extends DateEntity {
   @ApiPropertyOptional()
   landmark: string;
 
-  @Column()
-  @ApiProperty()
+  @Column({ nullable: true })
+  @ApiPropertyOptional()
   village: string;
 
   @Column({ nullable: true, name: 'middlename' })
@@ -107,7 +106,7 @@ export class Enrollment extends DateEntity {
 
   @Column({ nullable: true, name: 'screeningid' })
   @ApiPropertyOptional()
-  screeningId: Date;
+  screeningId: string;
 
   @Column({ nullable: true })
   @ApiPropertyOptional()
@@ -118,7 +117,7 @@ export class Enrollment extends DateEntity {
   scheduledReturn: Date;
 
   @Column({ type: 'enum', enum: GENDER })
-  @ApiProperty()
+  @ApiProperty({ enum: GENDER })
   gender: GENDER;
 
   @ManyToOne(() => Objective, (objective) => objective, {
@@ -171,20 +170,6 @@ export class Enrollment extends DateEntity {
   @ApiProperty({ type: OrganisationUnit })
   organisationUnit: OrganisationUnit;
 
-  @ManyToMany(() => Field, (field) => field, {
-    nullable: false,
-    cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  @JoinTable({
-    name: 'enrollmentfield',
-    joinColumn: { referencedColumnName: 'id', name: 'stage' },
-    inverseJoinColumn: { referencedColumnName: 'id', name: 'field' },
-  })
-  @ApiPropertyOptional({ type: [Field] })
-  fields: Field[];
-
   @OneToOne(() => Followup, (followup) => followup.enrollment, {
     cascade: true,
   })
@@ -201,6 +186,13 @@ export class Enrollment extends DateEntity {
 
   @BeforeInsert()
   async beforeInsert() {
+    if (this.phones?.length > 0) {
+      const id = this.id || uuidv4();
+      this.id = id;
+      this.phones = this.phones.map((phone) => {
+        return { ...phone, enrollment: { id } } as Phone;
+      });
+    }
     if (!this.organisationUnit?.id) {
       throwError(new NotFoundException('Organisation Unit cannot be null'));
     }

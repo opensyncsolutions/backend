@@ -35,5 +35,6 @@ export class Form extends NameEntity {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
+  @ApiPropertyOptional({ type: [EnrollmentSection] })
   sections: EnrollmentSection[];
 }

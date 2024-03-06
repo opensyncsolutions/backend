@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { DateEntity } from '../general/date.entity';
 import { Enrollment } from './enrollment.entity';
 import { SAMPLESTATUS, SURVEYSTATUS } from '../../enums/data.collection.enum';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity('dataCollection')
 export class DataCollection extends DateEntity {
@@ -15,33 +16,43 @@ export class DataCollection extends DateEntity {
     nullable: false,
   })
   @JoinColumn({ name: 'enrollment' })
+  @ApiProperty({ type: Enrollment })
   enrollment: Enrollment;
 
   @Column()
+  @ApiProperty()
   mdhStatus: string;
 
   @Column({ nullable: true, name: 'baselinesurveydate' })
+  @ApiPropertyOptional()
   baselineSurveyReadyDate: Date;
 
   @Column({ nullable: true, name: 'baselinesurveycompleteddate' })
+  @ApiPropertyOptional()
   baselineSurveyCompletedDate: Date;
 
   @Column({ nullable: true, name: 'midlinehvlsamplereadydate' })
+  @ApiPropertyOptional()
   midlineHvlSampleReadyDate: Date;
 
   @Column({ nullable: true, name: 'midlinehvlsampledate' })
+  @ApiPropertyOptional()
   midlineHvlSampleDate: Date;
 
   @Column({ nullable: true, name: 'midlinehvlresultreadydate' })
+  @ApiPropertyOptional()
   midlineHvlResultReadyDate: Date;
 
   @Column({ nullable: true, name: 'midlinehvlresultdate' })
+  @ApiPropertyOptional()
   midlineHvlResultDate: Date;
 
   @Column({ nullable: true, name: 'endlinesurveyreadydate' })
+  @ApiPropertyOptional()
   endlineSurveyReadyDate: Date;
 
   @Column({ nullable: true, name: 'endlinesurveydate' })
+  @ApiPropertyOptional()
   endlineSurveyDate: Date;
 
   @Column({
@@ -50,6 +61,7 @@ export class DataCollection extends DateEntity {
     default: SAMPLESTATUS['-'],
     name: 'midlinehvlresultstatus',
   })
+  @ApiPropertyOptional({ enum: SAMPLESTATUS })
   midlineHvlResultStatus: SAMPLESTATUS;
 
   @Column({
@@ -58,6 +70,7 @@ export class DataCollection extends DateEntity {
     default: SURVEYSTATUS.complete,
     name: 'baselinesurveystatus',
   })
+  @ApiPropertyOptional({ enum: SURVEYSTATUS })
   baselineSurveyStatus: SURVEYSTATUS;
 
   @Column({
@@ -66,6 +79,7 @@ export class DataCollection extends DateEntity {
     default: SURVEYSTATUS.notReady,
     name: 'endlinesurveystatus',
   })
+  @ApiPropertyOptional({ enum: SURVEYSTATUS })
   endlineSurveyStatus: SURVEYSTATUS;
 
   @Column({
@@ -74,6 +88,7 @@ export class DataCollection extends DateEntity {
     default: SURVEYSTATUS.notReady,
     name: 'midlinehvlsamplestatus',
   })
+  @ApiPropertyOptional({ enum: SURVEYSTATUS })
   midlineHvlSampleStatus: SURVEYSTATUS;
 }
 
