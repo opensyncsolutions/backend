@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -8,12 +9,16 @@ export class AppController {
   }
 
   @Get('/images/icons/gear.png')
-  gear() {
-    return '✅';
+  gear(@Res() res: Response) {
+    return res?.sendFile('default__opensync_dp.png', {
+      root: `./`,
+    });
   }
 
   @Get('/favicon.ico')
-  favicon() {
-    return '✅';
+  ico(@Res() res: Response) {
+    return res?.sendFile('default__opensync_dp.png', {
+      root: `./`,
+    });
   }
 }
