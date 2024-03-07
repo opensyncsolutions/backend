@@ -34,8 +34,8 @@ export class UserController extends SharedController<User> {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: async (
-          req: { session: { [x: string]: { id: any } } },
+        destination: (
+          req: any,
           _file: any,
           callback: (arg0: null, arg1: string) => void,
         ) => {

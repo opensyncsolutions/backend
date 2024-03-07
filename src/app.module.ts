@@ -11,6 +11,7 @@ import { ObjectiveModule } from './modules/objective/objective.module';
 import { FormModule } from './modules/form/form.module';
 import { PhoneModule } from './modules/phone/phone.module';
 import { NetworkModule } from './modules/network/network.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -33,5 +34,6 @@ import { NetworkModule } from './modules/network/network.module';
     NetworkModule,
   ],
   controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
