@@ -21,6 +21,7 @@ import {
   DataCollection,
   Eac,
   EacSession,
+  Menu,
 } from './entities';
 
 export const schemaEntities = [
@@ -46,4 +47,5 @@ export const schemaEntities = [
   DataCollection,
   Eac,
   EacSession,
+  Menu,
 ];

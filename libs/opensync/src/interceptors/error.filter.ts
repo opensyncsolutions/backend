@@ -14,21 +14,13 @@ export class HttpErrorFilter implements ExceptionFilter {
     const request = context.getRequest();
     const response = context.getResponse();
     if (
-      (exception?.response?.message?.includes('Cannot GET') ||
-        exception?.response?.message?.includes('Cannot POST') ||
-        exception?.response?.message?.includes('Cannot PUT') ||
-        exception?.response?.message?.includes('Cannot PATCH')) &&
+      exception?.response?.message?.includes('Cannot GET') &&
       !exception?.response?.message?.includes('/api/')
     ) {
-      const errorArray: string[] = exception?.response?.message?.split(' ');
-
-      if (!errorArray[errorArray?.length - 1]?.includes('/api')) {
-        Logger.warn(`MISSING ROUTE: ${request?.url}`, 'WARN');
-        return response.redirect('/');
-      }
-
-      Logger.warn(`MISSING ROUTE: ${request?.url}`, 'WARN');
-      return response.redirect('/');
+      console.log('HERE:::HERE');
+      return response
+        .status(HttpStatus.NOT_FOUND)
+        .send({ error: 'Route Missing' });
     }
     try {
       let message: string;

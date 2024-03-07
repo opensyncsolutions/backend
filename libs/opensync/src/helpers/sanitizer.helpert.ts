@@ -69,7 +69,8 @@ const sanitizeMessage = (message: string) => {
     message?.includes('Cannot GET') ||
     message?.includes('Cannot PATCH') ||
     message?.includes('Cannot DELETE') ||
-    message?.includes('Cannot PUT')
+    message?.includes('Cannot PUT') ||
+    message?.includes('path must be absolute or specify root')
   ) {
     message = 'Oops 😢! Route not available.';
   }

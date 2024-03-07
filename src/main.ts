@@ -54,18 +54,19 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  const config = new DocumentBuilder()
-    .setTitle('opensync')
-    .setVersion('1.0')
-    .build();
+  if (APPENV.NODE_ENV === 'development') {
+    const config = new DocumentBuilder()
+      .setTitle('opensync')
+      .setVersion('1.0')
+      .build();
 
-  const options: SwaggerDocumentOptions = {
-    extraModels: schemaEntities,
-    deepScanRoutes: true,
-  };
-  const Document = SwaggerModule.createDocument(app, config, options);
-  SwaggerModule.setup('api', app, Document);
-
+    const options: SwaggerDocumentOptions = {
+      extraModels: schemaEntities,
+      deepScanRoutes: true,
+    };
+    const Document = SwaggerModule.createDocument(app, config, options);
+    SwaggerModule.setup('api', app, Document);
+  }
   await app.listen(PORT);
   Logger.debug(`App running on port: ${PORT}`, 'APP PORT');
 }

@@ -20,3 +20,4 @@ export * from './data/bloodcollection.entity';
 export * from './data/datacollection.entity';
 export * from './data/eac.entity';
 export * from './data/session.entity';
+export * from './general/menu.entity';

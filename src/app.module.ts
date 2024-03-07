@@ -11,6 +11,7 @@ import { NetworkModule } from './modules/network/network.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { PhoneModule } from './modules/phone/phone.module';
+import { MenuModule } from './modules/menu/menu.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PhoneModule } from './modules/phone/phone.module';
     FormModule,
     PhoneModule,
     NetworkModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
