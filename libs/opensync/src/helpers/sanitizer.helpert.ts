@@ -203,7 +203,16 @@ const sanitizeRequestObject = (
 ) => {
   const newResponseObject: Record<string, unknown> = {};
   const attributeKeys = Object.keys(
-    omit(request, ['lastLogin', 'createdBy', 'updatedBy', 'secret']),
+    omit(request, [
+      'lastLogin',
+      'createdBy',
+      'updatedBy',
+      'secret',
+      'path',
+      'level',
+      'updated',
+      'created',
+    ]),
   );
 
   attributeKeys.forEach((attributeKey) => {
