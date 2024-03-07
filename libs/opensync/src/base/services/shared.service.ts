@@ -404,6 +404,15 @@ export class SharedService<T extends BaseEntity> {
               name: field.propertyName,
               mandatory: !field.isNullable && !field.default,
               type: this.getColumnType(field.type.toString()),
+              description: field.comment,
+              options: field?.enum?.map((option) => {
+                return {
+                  name:
+                    option?.toString()?.charAt(0)?.toUpperCase() +
+                    option?.toString()?.slice(1)?.toLowerCase(),
+                  value: option,
+                };
+              }),
             };
           }
         })
@@ -479,7 +488,7 @@ export class SharedService<T extends BaseEntity> {
   };
   deleteEntity = async (id: string): Promise<void> => {
     try {
-      await this.repository.softDelete(id);
+      await this.repository.delete(id);
     } catch (e) {
       this.sanitizeDeleteError(e);
     }

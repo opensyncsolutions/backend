@@ -20,6 +20,10 @@ export class Phone extends DateEntity {
   @ApiPropertyOptional()
   personal: boolean;
 
+  @Column({ default: false, name: 'mobilemoneyaccount' })
+  @ApiPropertyOptional()
+  mobileMoneyAccount: boolean;
+
   @Column({ nullable: true })
   @ApiPropertyOptional()
   name: string;

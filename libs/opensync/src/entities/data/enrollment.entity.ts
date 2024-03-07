@@ -32,91 +32,200 @@ export class Enrollment extends DateEntity {
     type: 'enum',
     enum: ENROLLMENTSTATUS,
     default: ENROLLMENTSTATUS.control,
+    comment: 'Status',
   })
   @ApiPropertyOptional()
   status: ENROLLMENTSTATUS;
 
-  @Column({ name: 'studyid', nullable: true })
+  @Column({ name: 'studyid', nullable: true, comment: 'Study ID' })
   @ApiPropertyOptional()
   studyId: string;
 
-  @Column({ name: 'ctcid' })
+  @Column({ name: 'ctcid', comment: 'CTC ID' })
   @ApiProperty()
   ctcId: string;
 
-  @Column({ name: 'recentvisit', nullable: true })
+  @Column({
+    name: 'recentvisit',
+    nullable: true,
+    comment: 'Recent Attended Visit',
+  })
   @ApiPropertyOptional()
   recentVisit: Date;
 
-  @Column({ default: false, name: 'participantconsent' })
+  @Column({
+    default: false,
+    name: 'participantconsent',
+    comment: 'Participant Consent',
+  })
   @ApiPropertyOptional()
   participantConsent: boolean;
 
-  @Column({ default: false, name: 'informedconsent' })
+  @Column({
+    default: false,
+    name: 'informedconsent',
+    comment: 'Informed Consent',
+  })
   @ApiPropertyOptional()
   informedConsent: boolean;
 
-  @Column({ default: false, name: 'fundsconfirmation' })
+  @Column({
+    default: false,
+    name: 'followupconsent',
+    comment: 'Informed Followup Consent',
+  })
+  @ApiPropertyOptional()
+  followupConsent: boolean;
+
+  @Column({
+    default: false,
+    name: 'fundsconfirmation',
+    comment: 'Send Funds Confirmation',
+  })
   @ApiPropertyOptional()
   fundsConfirmation: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Nearest Landmark' })
   @ApiPropertyOptional()
   landmark: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Street/Village' })
   @ApiPropertyOptional()
   village: string;
 
-  @Column({ nullable: true, name: 'middlename' })
+  @Column({ nullable: true, name: 'middlename', comment: 'Middle Name' })
   @ApiPropertyOptional()
   middleName: string;
 
-  @Column({ nullable: true, name: 'nickname' })
+  @Column({ nullable: true, name: 'nickname', comment: 'Nick Name' })
   @ApiPropertyOptional()
   nickName: string;
 
-  @Column({ nullable: true, name: 'mothername' })
+  @Column({ nullable: true, name: 'mothername', comment: "Mother's Name" })
   @ApiPropertyOptional()
   motherName: string;
 
-  @Column({ nullable: true, name: 'hbcname' })
+  @Column({ nullable: true, name: 'hbcname', comment: 'HBC Name' })
   @ApiPropertyOptional()
   hbcName: string;
 
-  @Column({ nullable: true, name: 'hbcnumber' })
+  @Column({ nullable: true, name: 'hbcnumber', comment: 'HBC Number' })
   @ApiPropertyOptional()
   hbcNumber: string;
 
-  @Column({ name: 'firstname' })
+  @Column({ name: 'firstname', comment: 'First Name' })
   @ApiProperty()
   firstName: string;
 
-  @Column()
+  @Column({ comment: 'Surname' })
   @ApiProperty()
   surname: string;
 
-  @Column()
+  @Column({ comment: 'Date of Birth' })
   @ApiProperty()
   dob: Date;
 
-  @Column({ nullable: true, name: 'enrollmentdate' })
+  @Column({
+    nullable: true,
+    name: 'enrollmentdate',
+    comment: 'Enrolled Date',
+  })
   @ApiPropertyOptional()
   enrollmentDate: Date;
 
-  @Column({ nullable: true, name: 'screeningid' })
+  @Column({ nullable: true, name: 'screeningid', comment: 'Screening ID' })
   @ApiPropertyOptional()
   screeningId: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Recent Scheduled Appointment' })
   @ApiPropertyOptional()
   appointment: Date;
 
-  @Column({ nullable: true, name: 'scheduledreturn' })
+  @Column({
+    nullable: true,
+    name: 'scheduledreturn',
+    comment: 'Scheduled Return To Care',
+  })
   @ApiPropertyOptional()
   scheduledReturn: Date;
 
-  @Column({ type: 'enum', enum: GENDER })
+  @Column({
+    nullable: true,
+    name: 'assessmentdate',
+    comment: 'Date Eligibility Assessment',
+  })
+  @ApiPropertyOptional()
+  assessmentDate: Date;
+
+  @Column({
+    nullable: true,
+    name: 'viralloaddate',
+    comment: 'Viral Load Date',
+  })
+  @ApiPropertyOptional()
+  viralLoadDate: Date;
+
+  @Column({
+    nullable: true,
+    name: 'ecounsellingdate',
+    comment: 'Enhanced Adherence Counselling Date',
+  })
+  @ApiPropertyOptional()
+  ecounsellingDate: Date;
+
+  @Column({
+    nullable: true,
+    name: 'clinicalinterventionvisit',
+    comment: 'Next Clinical Intervention Visit',
+  })
+  @ApiPropertyOptional()
+  clinicalInterventionVisit: Date;
+
+  @Column({
+    nullable: true,
+    name: 'clinicalcontrolvisit',
+    comment: 'Next Clinical Control Visit',
+  })
+  @ApiPropertyOptional()
+  clinicalControlVisit: Date;
+
+  @Column({
+    nullable: true,
+    name: 'returnmobilenumber',
+    comment: 'Return With Mobile Number',
+  })
+  @ApiPropertyOptional()
+  returnMobileNumber: boolean;
+
+  @Column({ nullable: true, name: 'mainconsentstudy' })
+  @ApiPropertyOptional()
+  mainConsentStudy: boolean;
+
+  @Column({
+    nullable: true,
+    name: 'consenttobecontacted',
+    comment: 'Consent To Be Contacted',
+  })
+  @ApiPropertyOptional()
+  consentToBeContacted: boolean;
+
+  @Column({
+    nullable: true,
+    name: 'completebaselinesurvey',
+    comment: 'Complete Baseline Survey',
+  })
+  @ApiPropertyOptional()
+  completeBaselineSurvey: boolean;
+
+  @Column({
+    nullable: true,
+    name: 'currentenrolled',
+    comment: 'Client Currently Enrolled',
+  })
+  @ApiPropertyOptional()
+  currentEnrolled: boolean;
+
+  @Column({ type: 'enum', enum: GENDER, comment: "Participant's Sex" })
   @ApiProperty({ enum: GENDER })
   gender: GENDER;
 
