@@ -61,9 +61,6 @@ export class SharedController<T extends BaseEntity> {
     try {
       const record = await this.service.save({
         ...payload,
-        createdBy: {
-          id: req?.session?.user?.id,
-        },
         user: req.session.user,
         query,
       });
@@ -200,7 +197,6 @@ export class SharedController<T extends BaseEntity> {
       ...payload,
       update: true,
       id,
-      updatedBy: { id: req?.session?.user?.id },
       user: req.session.user,
       query,
     });

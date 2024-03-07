@@ -3,7 +3,7 @@ import { DateEntity } from '../general/date.entity';
 import { Enrollment } from './enrollment.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-@Entity('bloodCollection')
+@Entity('bloodcollection')
 export class BloodCollection extends DateEntity {
   static plural = 'bloodCollections';
   static READ = 'READ_BLOODCOLLECTIONS';
@@ -18,15 +18,15 @@ export class BloodCollection extends DateEntity {
   @ApiProperty({ type: Enrollment })
   enrollment: Enrollment;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'mdhcollection', comment: 'MDH Collection' })
   @ApiPropertyOptional()
   mdhCollection: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Result' })
   @ApiPropertyOptional()
   result: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'resultdate', comment: 'Result Date' })
   @ApiPropertyOptional()
   resultDate: Date;
 }

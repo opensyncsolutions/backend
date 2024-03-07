@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -25,13 +26,17 @@ export class EacSession extends BaseEntity {
   @ApiPropertyOptional()
   id: string;
 
-  @Column({ type: 'enum', enum: SESSIONNUMBER })
+  @Column({ type: 'enum', enum: SESSIONNUMBER, comment: 'Session Number' })
   @ApiProperty()
   session: SESSIONNUMBER;
 
   @CreateDateColumn()
   @ApiPropertyOptional()
   created: Date;
+
+  @Column({ comment: 'Session Date' })
+  @ApiPropertyOptional()
+  date: Date;
 
   @ManyToOne(() => Eac, (eac) => eac, {
     nullable: false,
@@ -40,4 +45,9 @@ export class EacSession extends BaseEntity {
   @JoinColumn({ name: 'eac', referencedColumnName: 'id' })
   @ApiProperty({ type: Eac })
   eac: Eac;
+
+  @BeforeInsert()
+  beforeInsert() {
+    this.date = new Date().toISOString() as any;
+  }
 }

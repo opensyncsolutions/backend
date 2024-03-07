@@ -89,9 +89,15 @@ export class SharedService<T extends BaseEntity> {
     payload['script'] = script;
     payload['query'] = query;
     if (payload['update']) {
-      return await this.update(payload);
+      return await this.update({
+        ...payload,
+        updatedBy: { id: payload['user']['id'] },
+      });
     }
-    return await this.create(payload);
+    return await this.create({
+      ...payload,
+      createdBy: { id: payload['user']['id'] },
+    });
   };
 
   findOneOrFail = async (payload: GetOneReqInterface): Promise<T> => {

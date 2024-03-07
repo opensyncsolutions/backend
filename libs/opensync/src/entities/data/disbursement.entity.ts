@@ -20,7 +20,7 @@ export class Disbursement extends DateEntity {
   enrollment: Enrollment;
 
   @ManyToOne(() => Network, (network) => network, {
-    nullable: false,
+    nullable: true,
   })
   @JoinColumn({ name: 'mobile' })
   @ApiProperty({ type: Network })
@@ -36,7 +36,19 @@ export class Disbursement extends DateEntity {
 
   @Column({ nullable: true })
   @ApiPropertyOptional()
+  resultcode: string;
+
+  @Column({ nullable: true })
+  @ApiPropertyOptional()
+  transid: string;
+
+  @Column({ nullable: true })
+  @ApiPropertyOptional()
   result: string;
+
+  @Column({ nullable: true })
+  @ApiPropertyOptional()
+  message: string;
 
   @Column({ nullable: true })
   @ApiPropertyOptional()

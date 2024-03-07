@@ -9,6 +9,7 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { BloodCollection, EnrollmentStage, OrganisationUnit } from '..';
 import { ENROLLMENTSTATUS, GENDER } from '../../enums/enrollment.enum';
 import { throwError } from '../../helpers';
@@ -18,7 +19,6 @@ import { Disbursement } from './disbursement.entity';
 import { Followup } from './followup.entity';
 import { Objective } from './objective.entity';
 import { Phone } from './phone.entity';
-import { v4 as uuidv4 } from 'uuid';
 
 @Entity('enrollment', { schema: 'public' })
 export class Enrollment extends DateEntity {
@@ -167,11 +167,11 @@ export class Enrollment extends DateEntity {
 
   @Column({
     nullable: true,
-    name: 'ecounsellingdate',
+    name: 'counsellingdate',
     comment: 'Enhanced Adherence Counselling Date',
   })
   @ApiPropertyOptional()
-  ecounsellingDate: Date;
+  counsellingDate: Date;
 
   @Column({
     nullable: true,

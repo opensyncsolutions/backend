@@ -19,56 +19,82 @@ export class DataCollection extends DateEntity {
   @ApiProperty({ type: Enrollment })
   enrollment: Enrollment;
 
-  @Column()
+  @Column({ name: 'mdhstatus', comment: 'MDH Status', nullable: true })
   @ApiProperty()
   mdhStatus: string;
 
-  @Column({ nullable: true, name: 'baselinesurveydate' })
+  @Column({
+    nullable: true,
+    name: 'baselinesurveydate',
+    comment: 'Baseline Survey Date',
+  })
   @ApiPropertyOptional()
-  baselineSurveyReadyDate: Date;
+  baselineSurvey: Date;
 
-  @Column({ nullable: true, name: 'baselinesurveycompleteddate' })
+  @Column({
+    nullable: true,
+    name: 'completed',
+    comment: 'Baseline Survey Completed',
+  })
   @ApiPropertyOptional()
-  baselineSurveyCompletedDate: Date;
+  completed: Date;
 
-  @Column({ nullable: true, name: 'midlinehvlsamplereadydate' })
+  @Column({
+    nullable: true,
+    name: 'midlinehvlsample',
+    comment: 'Midline HVL Sample',
+  })
   @ApiPropertyOptional()
-  midlineHvlSampleReadyDate: Date;
+  midlineHvlSample: Date;
 
-  @Column({ nullable: true, name: 'midlinehvlsampledate' })
+  @Column({
+    nullable: true,
+    name: 'midlinehvlresult',
+    comment: 'Midline HVL Result',
+  })
   @ApiPropertyOptional()
-  midlineHvlSampleDate: Date;
+  midlineHvlResult: Date;
 
-  @Column({ nullable: true, name: 'midlinehvlresultreadydate' })
+  @Column({
+    nullable: true,
+    name: 'endlinehvlsample',
+    comment: 'Endline HVL Sample',
+  })
   @ApiPropertyOptional()
-  midlineHvlResultReadyDate: Date;
+  endlineHvlSample: Date;
 
-  @Column({ nullable: true, name: 'midlinehvlresultdate' })
+  @Column({
+    nullable: true,
+    name: 'endlinehvlresult',
+    comment: 'Endline HVL Result',
+  })
   @ApiPropertyOptional()
-  midlineHvlResultDate: Date;
+  endlineHvlResult: Date;
 
-  @Column({ nullable: true, name: 'endlinesurveyreadydate' })
+  @Column({
+    nullable: true,
+    name: 'endlinesurvey',
+    comment: 'Endline Survey Date',
+  })
   @ApiPropertyOptional()
-  endlineSurveyReadyDate: Date;
-
-  @Column({ nullable: true, name: 'endlinesurveydate' })
-  @ApiPropertyOptional()
-  endlineSurveyDate: Date;
+  endlineSurvey: Date;
 
   @Column({
     type: 'enum',
     enum: SAMPLESTATUS,
     default: SAMPLESTATUS['-'],
-    name: 'midlinehvlresultstatus',
+    name: 'midlinehvlstatus',
+    comment: 'Midline HVL Result Status',
   })
   @ApiPropertyOptional({ enum: SAMPLESTATUS })
-  midlineHvlResultStatus: SAMPLESTATUS;
+  midlineHvlStatus: SAMPLESTATUS;
 
   @Column({
     type: 'enum',
     enum: SURVEYSTATUS,
     default: SURVEYSTATUS.complete,
     name: 'baselinesurveystatus',
+    comment: 'Baseline Survey Status',
   })
   @ApiPropertyOptional({ enum: SURVEYSTATUS })
   baselineSurveyStatus: SURVEYSTATUS;
@@ -78,36 +104,8 @@ export class DataCollection extends DateEntity {
     enum: SURVEYSTATUS,
     default: SURVEYSTATUS.notReady,
     name: 'endlinesurveystatus',
+    comment: 'Endline Survey Status',
   })
   @ApiPropertyOptional({ enum: SURVEYSTATUS })
   endlineSurveyStatus: SURVEYSTATUS;
-
-  @Column({
-    type: 'enum',
-    enum: SURVEYSTATUS,
-    default: SURVEYSTATUS.notReady,
-    name: 'midlinehvlsamplestatus',
-  })
-  @ApiPropertyOptional({ enum: SURVEYSTATUS })
-  midlineHvlSampleStatus: SURVEYSTATUS;
 }
-
-/*
-{
-                "baseline_survey": "OVERDUE",
-                "baseline_survey_date": null,
-                "endline_hvl_sample": "NOT READY",
-                "endline_hvl_sample_date": null,
-                "endline_survey": "NOT READY",
-                "endline_survey_date": null,
-                "endline_hvl_result": "-",
-                "endline_hvl_result_date": null,
-                "mdh_status": null,
-                "check_in_phone_call": null,
-                "enrollment_date": null,
-                "clinic": {
-                    "id": "0097ff83-f290-4a87-b891-feb017b162c0",
-                    "name": "Geita Regional Referral Hospital"
-                }
-            }
-*/

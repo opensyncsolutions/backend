@@ -1,10 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { NameEntity } from '../general/named.entity';
-import { Enrollment } from './enrollment.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { DateEntity } from '../general/date.entity';
+import { Enrollment } from './enrollment.entity';
 
 @Entity('followup')
-export class Followup extends NameEntity {
+export class Followup extends DateEntity {
   static plural = 'followups';
   static READ = 'READ_FOLLOWUPS';
   static ADD = 'ADD_FOLLOWUPS';
@@ -18,19 +18,11 @@ export class Followup extends NameEntity {
   @ApiProperty({ type: Enrollment })
   enrollment: Enrollment;
 
-  @Column({ name: 'nextvisit', nullable: true })
+  @Column({ name: 'nextvisit', nullable: true, comment: 'Next Visit Date' })
   @ApiPropertyOptional()
   nextVisit: Date;
 
-  @Column({ name: 'firstreturn', nullable: true })
+  @Column({ name: 'firstreturn', nullable: true, comment: 'First Return Date' })
   @ApiPropertyOptional()
   firstReturn: Date;
-
-  @Column({ name: 'phonenumber', nullable: true })
-  @ApiPropertyOptional()
-  phoneNumber: string;
-
-  @Column({ name: 'alternativephonenumber', nullable: true })
-  @ApiPropertyOptional()
-  alternativePhoneNumber: string;
 }
