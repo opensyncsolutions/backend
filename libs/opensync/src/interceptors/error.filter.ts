@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { errorSanitizer } from '../helpers/index';
+import { CLIENT } from '../system';
 
 @Catch()
 export class HttpErrorFilter implements ExceptionFilter {
@@ -17,10 +18,7 @@ export class HttpErrorFilter implements ExceptionFilter {
       exception?.response?.message?.includes('Cannot GET') &&
       !exception?.response?.message?.includes('/api/')
     ) {
-      console.log('HERE:::HERE');
-      return response
-        .status(HttpStatus.NOT_FOUND)
-        .send({ error: 'Route Missing' });
+      return response.sendFile('index.html', { root: CLIENT });
     }
     try {
       let message: string;
