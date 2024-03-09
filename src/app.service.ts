@@ -58,6 +58,7 @@ export class AppService {
       for (const key of keys) {
         await this.createFiles(files[key], appName);
       }
+      await this.updateMenus();
       return { status: true, message: 'App updated' };
     } catch (e) {
       this.deleteFolder(`${SYSTEMPATH}/${appName}`);
@@ -131,5 +132,18 @@ export class AppService {
 
     const buffer = await file.async('arraybuffer');
     writeFileSync(`${path}/${file.name}`, Buffer.from(buffer));
+  };
+
+  private updateMenus = async () => {
+    try {
+      const manifest = readFileSync(
+        `${SYSTEMPATH}/client/manifest.webapp`,
+        'utf8',
+      );
+
+      console.log('MANNNNNNNNNNNNNNNNN', manifest);
+    } catch (e) {
+      console.log(e);
+    }
   };
 }

@@ -12,11 +12,13 @@ import { ObjectiveModule } from './modules/objective/objective.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { PhoneModule } from './modules/phone/phone.module';
 import { MenuModule } from './modules/menu/menu.module';
+import { resolve } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: CLIENT,
+      rootPath: resolve(__dirname, CLIENT),
+      serveRoot: '/',
     }),
     TypeOrmModule.forRoot({
       name: 'default',
