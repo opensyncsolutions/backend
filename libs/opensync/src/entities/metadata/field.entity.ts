@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
 import { NameEntity } from '../general/named.entity';
+import { FIELDTYPE } from '../../enums/enrollment.enum';
 
 @Entity('field')
 export class Field extends NameEntity {
@@ -16,7 +17,7 @@ export class Field extends NameEntity {
 
   @Column({ type: 'json', nullable: true })
   @ApiPropertyOptional()
-  options: any[];
+  options: any;
 
   @Column()
   @ApiProperty()
@@ -26,7 +27,11 @@ export class Field extends NameEntity {
   @ApiPropertyOptional()
   mandatory: boolean;
 
-  @Column()
+  @Column({ nullable: true, name: 'sortorder' })
+  @ApiPropertyOptional()
+  sortOrder: number;
+
+  @Column({ type: 'enum', enum: FIELDTYPE })
   @ApiProperty()
-  type: 'DATE' | 'TEXT' | 'LONG_TEXT' | 'BOOLEAN' | 'NUMBER';
+  type: FIELDTYPE;
 }

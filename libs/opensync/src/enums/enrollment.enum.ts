@@ -14,3 +14,11 @@ export enum SESSIONNUMBER {
   third = 3,
   fourth = 4,
 }
+
+export enum FIELDTYPE {
+  date = 'DATE',
+  text = 'TEXT',
+  long_text = 'LONG_TEXT',
+  bool = 'BOOLEAN',
+  num = 'NUMBER',
+}

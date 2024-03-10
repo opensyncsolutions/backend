@@ -11,7 +11,7 @@ import { Field, Form } from '..';
 import { DateEntity } from '../general/date.entity';
 
 @Entity('section')
-export class EnrollmentSection extends DateEntity {
+export class Section extends DateEntity {
   static plural = 'sections';
   static READ = 'READ_SECTIONS';
   static ADD = 'ADD_SECTIONS';
@@ -21,6 +21,10 @@ export class EnrollmentSection extends DateEntity {
   @Column({ type: 'json', nullable: true })
   @ApiPropertyOptional()
   translations: any;
+
+  @Column({ nullable: true, name: 'sortorder' })
+  @ApiPropertyOptional()
+  sortOrder: number;
 
   @ManyToOne(() => Form, (form) => form.sections, {
     nullable: false,

@@ -1,9 +1,9 @@
-import { SharedController, EnrollmentSection } from '@app/opensync';
+import { SharedController, Section } from '@app/opensync';
 import { Controller } from '@nestjs/common';
 import { SectionService } from '../services/section.service';
 
-@Controller(`api/${EnrollmentSection.plural}`)
-export class SectionController extends SharedController<EnrollmentSection> {
+@Controller(`api/${Section.plural}`)
+export class SectionController extends SharedController<Section> {
   constructor(service: SectionService) {
     super(service);
   }
