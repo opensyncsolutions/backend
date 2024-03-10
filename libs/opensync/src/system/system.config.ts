@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from 'fs';
-import { OrganisationUnit, Privilege, Role, User } from '../entities';
+import { Menu, OrganisationUnit, Privilege, Role, User } from '../entities';
 import { schemaEntities } from '../schema.entities';
 
 export const SYSTEMPATH = './files';
@@ -104,6 +104,7 @@ export const SYSTEM = async () => {
   }
 
   Privilege.createPrivileges(privileges);
+  Menu.createMenus('6269df23-f8a0-4776-bd89-3015521bc19d');
 };
 
 export const SESSIONTIME = Number(process.env.SESSION_TIME) || 5e8;

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import {
   existsSync,
   mkdirSync,
@@ -9,16 +9,27 @@ import {
 } from 'fs';
 import { rename } from 'fs/promises';
 import * as jszip from 'jszip';
-import { SYSTEMPATH, FileInterface, TEMPFILES } from '@app/opensync';
+import {
+  SYSTEMPATH,
+  FileInterface,
+  TEMPFILES,
+  Menu,
+  User,
+} from '@app/opensync';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
-  create = async (file: FileInterface) => {
+  constructor(
+    @InjectRepository(Menu) private menuRepository: Repository<Menu>,
+  ) {}
+  create = async (file: FileInterface, user: User) => {
     const zip = readFileSync(file.path);
     const contents = await new jszip().loadAsync(zip);
     if (Object.keys(contents.files).includes('index.html')) {
       await this.renameFrontEnd('client', 'client-old');
-      return await this.unzip(contents.files, 'client');
+      return await this.unzip(contents.files, 'client', user);
     }
     return { status: false, error: 'Missing entry point' };
   };
@@ -52,13 +63,13 @@ export class AppService {
     } catch (e) {}
   };
 
-  private unzip = async (files: any, appName: string) => {
+  private unzip = async (files: any, appName: string, user: User) => {
     try {
       const keys = Object.keys(files);
       for (const key of keys) {
         await this.createFiles(files[key], appName);
       }
-      await this.updateMenus();
+      await this.updateMenus(user);
       return { status: true, message: 'App updated' };
     } catch (e) {
       this.deleteFolder(`${SYSTEMPATH}/${appName}`);
@@ -134,16 +145,33 @@ export class AppService {
     writeFileSync(`${path}/${file.name}`, Buffer.from(buffer));
   };
 
-  private updateMenus = async () => {
+  private updateMenus = async (user: User) => {
     try {
-      const manifest = readFileSync(
-        `${SYSTEMPATH}/client/manifest.webapp`,
-        'utf8',
+      const manifest = JSON.parse(
+        readFileSync(`${SYSTEMPATH}/client/manifest.webapp`, 'utf8'),
       );
+      if (manifest?.menus && Array.isArray(manifest.menus)) {
+        await this.createMenu(manifest.menus, user);
+      }
+    } catch (e) {}
+  };
 
-      console.log('MANNNNNNNNNNNNNNNNN', manifest);
-    } catch (e) {
-      console.log(e);
+  private createMenu = async (menus: Menu[], user: User): Promise<void> => {
+    for (const menu of menus) {
+      const existingMenu = await this.menuRepository.findOne({
+        where: { name: menu.name },
+      });
+      if (existingMenu) {
+        Logger.debug(`UPDATING EXISTING MENU ${menu.name || menu.displayName}`);
+        await this.menuRepository.save({
+          ...existingMenu,
+          ...menu,
+          updatedBy: { id: user.id },
+        });
+        return;
+      }
+      Logger.debug(`NEW MENU FOUND ${menu.name || menu.displayName}`);
+      await this.menuRepository.save({ ...menu, createdBy: { id: user.id } });
     }
   };
 }

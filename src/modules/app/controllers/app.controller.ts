@@ -8,11 +8,12 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
-import { AppService } from './app.service';
+import { AppService } from '../services/app.service';
 
 @Controller()
 export class AppController {
@@ -40,12 +41,13 @@ export class AppController {
   )
   async create(
     @Res() res: any,
+    @Req() req: any,
     @UploadedFile() file: FileInterface,
   ): Promise<{ status: boolean; message?: string; error?: string }> {
     if (!file)
       return res.status(HttpStatus.BAD_REQUEST).send({ error: 'Missing app.' });
     try {
-      const data = await this.service.create(file);
+      const data = await this.service.create(file, req.session.user);
       this.service.deleteTemp(file.filename);
       return res
         .status(data.status ? HttpStatus.OK : HttpStatus.BAD_REQUEST)

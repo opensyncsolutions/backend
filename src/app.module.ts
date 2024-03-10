@@ -2,17 +2,16 @@ import { CLIENT, DB, schemaEntities } from '@app/opensync';
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { resolve } from 'path';
+import { OpenSyncAppModule } from './modules/app/app.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module';
 import { FormModule } from './modules/form/form.module';
+import { MenuModule } from './modules/menu/menu.module';
 import { NetworkModule } from './modules/network/network.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { PhoneModule } from './modules/phone/phone.module';
-import { MenuModule } from './modules/menu/menu.module';
-import { resolve } from 'path';
 
 @Module({
   imports: [
@@ -34,8 +33,7 @@ import { resolve } from 'path';
     PhoneModule,
     NetworkModule,
     MenuModule,
+    OpenSyncAppModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
