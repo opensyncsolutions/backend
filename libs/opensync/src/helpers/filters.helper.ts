@@ -215,9 +215,7 @@ export const relations = (fields: any, metaData: EntityMetadata): any => {
 };
 export const select = (fields: any, metaData: EntityMetadata): any => {
   verifyFields(fields);
-  if (fields === '*') {
-    return null;
-  }
+  if (fields?.includes('*')) return null;
   return sortFields(fields, metaData);
 };
 
