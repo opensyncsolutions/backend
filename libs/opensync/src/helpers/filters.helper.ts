@@ -47,12 +47,17 @@ const sortFields = (fields: string, metaData: EntityMetadata) => {
 };
 
 const getRelations = (fields: string[], metaData: EntityMetadata): string[] => {
-  const relations = metaData.relations.map((relation) => relation.propertyPath);
-  if (fields?.length === 1 && fields?.includes('*')) return relations;
-  const relation = fields.filter(
-    (field) => relations?.includes(field) || field?.includes('.'),
+  const entityRelations = metaData.relations.map(
+    (relation) => relation.propertyPath,
   );
-  return relation;
+
+  let relations = fields.filter(
+    (field) => entityRelations?.includes(field) || field?.includes('.'),
+  );
+  if (fields.includes('*')) {
+    relations = [...new Set([...relations, ...entityRelations])];
+  }
+  return relations;
 };
 const verifyFields = (fields: any) => {
   if (typeof fields !== 'string') {
