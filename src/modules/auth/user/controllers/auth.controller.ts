@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Post,
   Query,
   Req,
@@ -47,6 +48,7 @@ export class AuthController {
         ),
       );
     } catch (e) {
+      Logger.debug(e.message, 'LOGIN ERROR');
       return res
         .status(HttpStatus.UNAUTHORIZED)
         .send({ message: 'Username or Password provided is incorrect.' });
