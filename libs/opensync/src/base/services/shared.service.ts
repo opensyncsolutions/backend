@@ -306,7 +306,7 @@ export class SharedService<T extends BaseEntity> {
   };
 
   getSelections = (fields: string) => {
-    return fields ? select(fields, this.repository.metadata) : null;
+    return fields ? select(fields, this.repository.metadata) : {};
   };
 
   validateBulky = async (payload: any[], user: User) => {

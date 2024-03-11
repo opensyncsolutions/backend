@@ -60,7 +60,7 @@ const getRelations = (fields: string[], metaData: EntityMetadata): string[] => {
   return relations;
 };
 const verifyFields = (fields: any) => {
-  if (typeof fields !== 'string') {
+  if (fields && typeof fields !== 'string') {
     throw new Error(
       `[Fields] Expected a string but received an ${typeof fields}.`,
     );
@@ -216,7 +216,7 @@ export const relations = (fields: any, metaData: EntityMetadata): any => {
 export const select = (fields: any, metaData: EntityMetadata): any => {
   verifyFields(fields);
   const splittedFields = [...new Set([...fields?.split(','), 'created', 'id'])];
-  if (splittedFields.includes('*')) return null;
+  if (splittedFields.includes('*')) return {};
   return sortFields(splittedFields, metaData);
 };
 
