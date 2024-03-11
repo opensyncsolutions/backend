@@ -6,6 +6,7 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import { DateEntity } from '../general/date.entity';
 import { UserGroup } from './user.group.entity';
 import { Role } from './role.entity';
+import { OrganisationUnit } from '../metadata/organisationUnit.entity';
 
 @Entity('user')
 export class User extends DateEntity {
@@ -65,6 +66,19 @@ export class User extends DateEntity {
   })
   @ApiPropertyOptional({ type: UserGroup })
   userGroups: UserGroup[];
+
+  @ManyToMany(() => OrganisationUnit, (organisationUnit) => organisationUnit, {
+    cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'userous',
+    joinColumn: { referencedColumnName: 'id', name: 'user' },
+    inverseJoinColumn: { referencedColumnName: 'id', name: 'ou' },
+  })
+  @ApiPropertyOptional({ type: OrganisationUnit })
+  organisationUnits: OrganisationUnit[];
 
   @ManyToMany(() => Role, (role) => role, {
     nullable: false,
