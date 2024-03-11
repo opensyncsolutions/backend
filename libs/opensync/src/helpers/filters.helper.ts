@@ -34,8 +34,8 @@ const hasIdKey = (obj: { [x: string]: any }) => {
   return false;
 };
 
-const sortFields = (fields: string, metaData: EntityMetadata) => {
-  return [...new Set([...fields?.split(','), 'created', 'id'])].filter(
+const sortFields = (fields: string[], metaData: EntityMetadata) => {
+  return fields.filter(
     (item: string) =>
       item?.indexOf('[') === -1 &&
       metaData.columns
@@ -215,8 +215,9 @@ export const relations = (fields: any, metaData: EntityMetadata): any => {
 };
 export const select = (fields: any, metaData: EntityMetadata): any => {
   verifyFields(fields);
-  if (fields?.includes('*')) return null;
-  return sortFields(fields, metaData);
+  const splittedFields = [...new Set([...fields?.split(','), 'created', 'id'])];
+  if (splittedFields.includes('*')) return null;
+  return sortFields(splittedFields, metaData);
 };
 
 const getORFIlter = (
