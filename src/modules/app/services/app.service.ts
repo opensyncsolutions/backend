@@ -159,15 +159,22 @@ export class AppService {
 
   private createMenu = async (menus: Menu[], user: User): Promise<void> => {
     for (const menu of menus) {
-      const existingMenu = await this.menuRepository.findOne({
-        where: { name: menu.name },
-      });
-      if (!existingMenu) {
-        Logger.debug(
-          `ADDING NEW MENU ${menu.name || menu.displayName}`,
-          'APP MENU',
-        );
-        await this.menuRepository.save({ ...menu, createdBy: { id: user.id } });
+      try {
+        const existingMenu = await this.menuRepository.findOne({
+          where: { name: menu.name },
+        });
+        if (!existingMenu) {
+          Logger.debug(
+            `ADDING NEW MENU ${menu.name || menu.displayName}`,
+            'APP MENU',
+          );
+          await this.menuRepository.save({
+            ...menu,
+            createdBy: { id: user.id },
+          });
+        }
+      } catch (e) {
+        Logger.error(e.message, 'APP MENU');
       }
     }
   };
