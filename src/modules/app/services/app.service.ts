@@ -69,7 +69,7 @@ export class AppService {
       for (const key of keys) {
         await this.createFiles(files[key], appName);
       }
-      await this.updateMenus(user);
+      this.addMenu(user);
       return { status: true, message: 'App updated' };
     } catch (e) {
       this.deleteFolder(`${SYSTEMPATH}/${appName}`);
@@ -145,7 +145,8 @@ export class AppService {
     writeFileSync(`${path}/${file.name}`, Buffer.from(buffer));
   };
 
-  private updateMenus = async (user: User) => {
+  private addMenu = async (user: User) => {
+    Logger.debug('CHECK MENU', 'APP MENU');
     try {
       const manifest = JSON.parse(
         readFileSync(`${SYSTEMPATH}/client/manifest.webapp`, 'utf8'),
@@ -161,17 +162,13 @@ export class AppService {
       const existingMenu = await this.menuRepository.findOne({
         where: { name: menu.name },
       });
-      if (existingMenu) {
-        Logger.debug(`UPDATING EXISTING MENU ${menu.name || menu.displayName}`);
-        await this.menuRepository.save({
-          ...existingMenu,
-          ...menu,
-          updatedBy: { id: user.id },
-        });
-        return;
+      if (!existingMenu) {
+        Logger.debug(
+          `ADDING NEW MENU ${menu.name || menu.displayName}`,
+          'APP MENU',
+        );
+        await this.menuRepository.save({ ...menu, createdBy: { id: user.id } });
       }
-      Logger.debug(`NEW MENU FOUND ${menu.name || menu.displayName}`);
-      await this.menuRepository.save({ ...menu, createdBy: { id: user.id } });
     }
   };
 }
