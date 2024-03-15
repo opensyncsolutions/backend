@@ -146,7 +146,7 @@ export class AppService {
   };
 
   private addMenu = async (user: User) => {
-    Logger.debug('CHECK MENU', 'APP MENU');
+    Logger.debug('CHECKING MENU', 'MENU');
     try {
       const manifest = JSON.parse(
         readFileSync(`${SYSTEMPATH}/client/manifest.webapp`, 'utf8'),
@@ -165,8 +165,8 @@ export class AppService {
         });
         if (!existingMenu) {
           Logger.debug(
-            `ADDING NEW MENU ${menu.name || menu.displayName}`,
-            'APP MENU',
+            `ADDING NEW MENU [${menu.name || menu.displayName}]`,
+            'MENU',
           );
           menu = this.menuRepository.create({
             ...menu,
@@ -175,7 +175,7 @@ export class AppService {
           await this.menuRepository.save(menu);
         }
       } catch (e) {
-        Logger.error(e.message, 'APP MENU');
+        Logger.error(e.message, 'MENU');
       }
     }
   };
