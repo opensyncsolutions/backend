@@ -140,6 +140,14 @@ export class User extends DateEntity {
     } catch (e) {}
   };
 
+  public static addOu = async (user: any): Promise<void> => {
+    try {
+      await User.save(user);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   public static getUser = async (username: string) => {
     const email = /^\S+@\S+$/;
     const isEmail = email.test(username);
@@ -149,7 +157,12 @@ export class User extends DateEntity {
         [isEmail ? 'email' : Number(username) ? 'phoneNumber' : 'username']:
           username,
       },
-      relations: ['roles', 'roles.privileges', 'userGroups'],
+      relations: [
+        'roles',
+        'roles.privileges',
+        'userGroups',
+        'organisationUnits',
+      ],
     });
 
     return user;
@@ -175,7 +188,12 @@ export class User extends DateEntity {
         [isEmail ? 'email' : Number(username) ? 'phoneNumber' : 'username']:
           username,
       },
-      relations: ['roles', 'roles.privileges', 'userGroups'],
+      relations: [
+        'roles',
+        'roles.privileges',
+        'userGroups',
+        'organisationUnits',
+      ],
     });
 
     if (

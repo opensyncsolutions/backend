@@ -77,6 +77,12 @@ export const SYSTEM = async () => {
     level: 1,
     createdBy: { id: '6269df23-f8a0-4776-bd89-3015521bc19d' },
   });
+
+  await User.addOu({
+    id: '6269df23-f8a0-4776-bd89-3015521bc19d',
+    organisationUnits: [{ id: '6269df23-f8a0-4776-bd89-3015521bc19d' }],
+  });
+
   let privileges = [];
   for (const entity of schemaEntities) {
     privileges = [

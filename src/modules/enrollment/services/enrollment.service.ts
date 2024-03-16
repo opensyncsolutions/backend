@@ -1,7 +1,14 @@
+import {
+  Enrollment,
+  GetManyReqInterface,
+  GetManySanitized,
+  SharedService,
+  USERAUTHORITIES,
+  getWhereConditions,
+} from '@app/opensync';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TreeRepository } from 'typeorm';
-import { Enrollment, SharedService } from '@app/opensync';
+import { ILike, In, TreeRepository } from 'typeorm';
 
 @Injectable()
 export class EnrollmentService extends SharedService<Enrollment> {
@@ -11,4 +18,51 @@ export class EnrollmentService extends SharedService<Enrollment> {
   ) {
     super(repository, Enrollment);
   }
+
+  getMany = async (body: GetManySanitized): Promise<any> => {
+    const { payload } = body;
+    const [data, total] = await this.repository.findAndCount({
+      select: this.getSelections(payload.fields),
+      relations: this.getRelations(payload.fields),
+      where: this.sanitizeWhere(getWhereConditions(payload), payload),
+      skip: payload.pageSize * payload.page,
+      take: payload.pageSize,
+      order: this.getOrder(payload.order),
+    });
+    return {
+      page: payload.page + 1,
+      total,
+      pageSize: payload.pageSize,
+      [this.entity['plural']]: data,
+    };
+  };
+
+  private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
+    if (USERAUTHORITIES(payload.user).includes('ALL')) return where;
+    if (Array.isArray(where))
+      return where.map((w) => {
+        return {
+          ...w,
+          organisationUnit: {
+            ...(w?.organisationUnit || {}),
+            path: In(
+              (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
+                ILike(`%'${organisationUnit.id}'%`),
+              ),
+            ),
+          },
+        };
+      });
+    return {
+      ...(where || {}),
+      organisationUnit: {
+        ...(where ? where['organisationUnit'] || {} : {}),
+        path: In(
+          (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
+            ILike(`%'${organisationUnit.id}'%`),
+          ),
+        ),
+      },
+    };
+  };
 }
