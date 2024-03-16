@@ -72,6 +72,7 @@ export const SYSTEM = async () => {
     shortName: 'OpenSync',
     description: 'OpenSync',
     id: '6269df23-f8a0-4776-bd89-3015521bc19d',
+    path: '6269df23-f8a0-4776-bd89-3015521bc19d',
     code: '0001-OPENSYNC',
     level: 1,
     createdBy: { id: '6269df23-f8a0-4776-bd89-3015521bc19d' },

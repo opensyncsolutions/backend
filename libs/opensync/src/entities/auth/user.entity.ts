@@ -16,7 +16,7 @@ export class User extends DateEntity {
   static DELETE = 'DELETE_USERS';
   static UPDATE = 'UPDATE_USERS';
 
-  @Column({ name: 'phonenumber', unique: true, nullable: true })
+  @Column({ name: 'phonenumber', nullable: true })
   @ApiPropertyOptional()
   @IsNotEmpty({ message: 'Phone number is required' })
   phoneNumber: string | null;

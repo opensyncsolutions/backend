@@ -10,6 +10,7 @@ import { NameEntity } from '../general/named.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BadRequestException } from '@nestjs/common';
 import { APPENV } from '../..';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('organisationunit')
 @Tree('closure-table')
@@ -23,6 +24,10 @@ export class OrganisationUnit extends NameEntity {
   @Column({ name: 'shortname' })
   @ApiProperty()
   shortName: string;
+
+  @Column()
+  @ApiProperty()
+  path: string;
 
   @Column({ name: 'openingdate', default: '1970-01-01' })
   @ApiPropertyOptional()
@@ -50,6 +55,8 @@ export class OrganisationUnit extends NameEntity {
 
   @BeforeInsert()
   async beforeInsertTransaction() {
+    this.id = this.id || uuidv4();
+    this.path = this.id;
     if (!this.shortName) {
       this.shortName = this.name;
     }
@@ -62,6 +69,7 @@ export class OrganisationUnit extends NameEntity {
         throw new BadRequestException('Missing organisationUnit parent');
 
       this.level = parent.level + 1;
+      this.path = `${parent.path}/${this.id}`;
     }
 
     if (!this.parent?.id && APPENV.ALLOWROOTS) {
@@ -76,6 +84,7 @@ export class OrganisationUnit extends NameEntity {
       if (!parent)
         throw new BadRequestException('Missing organisationUnit parent');
       this.level = parent.level + 1;
+      this.path = `${parent.path}/${this.id}`;
     }
   }
 
