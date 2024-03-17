@@ -3,6 +3,7 @@ import {
   GetManyReqInterface,
   GetManySanitized,
   SharedService,
+  USERAUTHORITIES,
   getWhereConditions,
 } from '@app/opensync';
 import { Injectable } from '@nestjs/common';
@@ -37,6 +38,7 @@ export class DataCollectionService extends SharedService<DataCollection> {
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
+    if (USERAUTHORITIES(payload.user).includes('ALL')) return where;
     if (Array.isArray(where))
       return where.map((w) => {
         return {
