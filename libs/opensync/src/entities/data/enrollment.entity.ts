@@ -197,7 +197,11 @@ export class Enrollment extends DateEntity {
   @ApiPropertyOptional()
   returnMobileNumber: boolean;
 
-  @Column({ nullable: true, name: 'mainconsentstudy' })
+  @Column({
+    nullable: true,
+    name: 'mainconsentstudy',
+    comment: 'Study Consent',
+  })
   @ApiPropertyOptional()
   mainConsentStudy: boolean;
 
