@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { BeforeInsert, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { throwError } from '../../helpers';
 import { NameEntity } from '../general/named.entity';
 import { OrganisationUnit } from '../metadata/organisationUnit.entity';
@@ -12,6 +12,9 @@ export class Objective extends NameEntity {
   static ADD = 'ADD_OBJECTIVES';
   static DELETE = 'DELETE_OBJECTIVES';
   static UPDATE = 'UPDATE_OBJECTIVES';
+
+  @Column({ nullable: true })
+  enrollments: number;
 
   @ManyToMany(() => OrganisationUnit, (organisationUnit) => organisationUnit, {
     nullable: false,
