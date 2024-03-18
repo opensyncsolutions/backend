@@ -173,7 +173,13 @@ export class AppService {
             createdBy: { id: user.id },
           });
           await this.menuRepository.save(menu);
+          return;
         }
+        await this.menuRepository.save({
+          id: existingMenu.id,
+          path: menu.path,
+          updatedBy: { id: user.id },
+        });
       } catch (e) {
         Logger.error(e.message, 'MENU');
       }
