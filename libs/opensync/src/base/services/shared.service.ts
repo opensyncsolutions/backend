@@ -104,7 +104,8 @@ export class SharedService<T extends BaseEntity> {
     const AUTHORITIES = USERAUTHORITIES(payload.user);
     if (
       AUTHORITIES?.includes(this.entity['READ']) ||
-      AUTHORITIES?.includes('ALL')
+      AUTHORITIES?.includes('ALL') ||
+      this.entity['READ'] === 'ALL'
     ) {
       return await this.findOne(payload);
     }
@@ -148,7 +149,8 @@ export class SharedService<T extends BaseEntity> {
     const AUTHORITIES = USERAUTHORITIES(payload.user);
     if (
       AUTHORITIES?.includes(this.entity['READ']) ||
-      AUTHORITIES?.includes('ALL')
+      AUTHORITIES?.includes('ALL') ||
+      this.entity['READ'] === 'ALL'
     ) {
       return await this.getMany({ payload, roles: AUTHORITIES });
     }
@@ -396,7 +398,8 @@ export class SharedService<T extends BaseEntity> {
     const AUTHORITIES = USERAUTHORITIES(user);
     if (
       AUTHORITIES?.includes(this.entity['READ']) ||
-      AUTHORITIES?.includes('ALL')
+      AUTHORITIES?.includes('ALL') ||
+      this.entity['READ'] === 'ALL'
     )
       return this.repository.metadata.columns
         .map((field) => {

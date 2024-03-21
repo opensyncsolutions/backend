@@ -13,7 +13,7 @@ import { NameEntity } from './named.entity';
 @Index('unique_menu', ['path', 'name'], { unique: true })
 export class Menu extends NameEntity {
   static plural = 'menus';
-  static READ = 'READ_MENUS';
+  static READ = 'ALL';
   static ADD = 'ADD_MENUS';
   static DELETE = 'DELETE_MENUS';
   static UPDATE = 'UPDATE_MENUS';
