@@ -33,6 +33,7 @@ export class MenuService extends SharedService<Menu> {
       });
       if (exists) {
         await this.repository.save({
+          ...menu,
           id: exists.id,
           path: menu.path,
           updatedBy: { id: user.id },
