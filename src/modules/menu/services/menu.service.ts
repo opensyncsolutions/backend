@@ -29,7 +29,7 @@ export class MenuService extends SharedService<Menu> {
   saveAndUpdateBulky = async (menu: Menu, user: User): Promise<void> => {
     try {
       const exists = await this.repository.findOne({
-        where: { name: menu.name },
+        where: { [menu.name ? 'name' : 'id']: menu.name || menu.id },
       });
       if (exists) {
         await this.repository.save({

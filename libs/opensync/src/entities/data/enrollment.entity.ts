@@ -321,7 +321,7 @@ export class Enrollment extends DateEntity {
         `Organisation Unit with ID ${this.organisationUnit.id} could not be found`,
       ];
     }
-    if (!ou.active) {
+    if (!ou?.active) {
       messages = [
         ...messages,
         `Organisation Unit with ID ${this.organisationUnit.id} is not active`,

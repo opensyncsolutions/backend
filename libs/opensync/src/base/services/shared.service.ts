@@ -630,6 +630,9 @@ export class SharedService<T extends BaseEntity> {
   };
 
   updateEntity = async (payload: T): Promise<T> => {
+    if (this.repository.metadata.tableName === 'organisationunit') {
+      delete payload['path'];
+    }
     const user = payload['user'];
     const existingRecord = await this.findOneOrFailInternal({
       id: payload['id'],
@@ -713,7 +716,7 @@ export class SharedService<T extends BaseEntity> {
 
   validateSystemEntity = (existing: any, payload: T): void => {
     if (
-      !existing.active &&
+      !existing?.active &&
       !Object.keys(payload)?.includes('active') &&
       !USERAUTHORITIES(payload['user']).includes('ALL')
     )

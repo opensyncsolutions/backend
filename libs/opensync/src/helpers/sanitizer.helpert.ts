@@ -209,7 +209,6 @@ const sanitizeRequestObject = (
       'createdBy',
       'updatedBy',
       'secret',
-      'path',
       'level',
       'updated',
       'created',

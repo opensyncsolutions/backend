@@ -46,7 +46,7 @@ export class Objective extends NameEntity {
           `Organisation Unit with ID ${organisationUnit.id} could not be found`,
         ];
       }
-      if (!ou.active) {
+      if (!ou?.active) {
         messages = [
           ...messages,
           `Organisation Unit with ID ${organisationUnit.id} is not active`,
