@@ -327,7 +327,7 @@ export class Enrollment extends DateEntity {
         `Organisation Unit with ID ${this.organisationUnit.id} is not active`,
       ];
     }
-    if (!ou.data) {
+    if (!ou?.data) {
       messages = [
         ...messages,
         `Organisation Unit with ID ${this.organisationUnit.id} does not allow data entry`,
