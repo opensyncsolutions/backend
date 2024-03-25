@@ -428,16 +428,19 @@ export class SharedService<T extends BaseEntity> {
           }
         })
         .filter((field) => field);
-      const columsnWithSort = columns.filter((column) => column.sortOrder);
-      const columsnWithoutSort = this.columsWithoutSort(columns);
-      return [...columsnWithSort, ...columsnWithoutSort];
+      const columnsWithSort = columns.filter((column) => column.sortOrder);
+      const columnsWithoutSort = this.columsWithoutSort(
+        columns,
+        columnsWithSort.length,
+      );
+      return [...columnsWithSort, ...columnsWithoutSort];
     }
     new UnauthorizedException(
       `You have no permission to view ${this.entity['plural']}`,
     );
   };
 
-  private columsWithoutSort = (columns: any[]) => {
+  private columsWithoutSort = (columns: any[], start: number) => {
     return columns
       .filter((column: { sortOrder: any }) => !column.sortOrder)
       .sort((a: { description: string }, b: { description: string }) => {
@@ -452,7 +455,7 @@ export class SharedService<T extends BaseEntity> {
         return 0;
       })
       .map((column, index) => {
-        return { ...column, sortOrder: index };
+        return { ...column, sortOrder: start + index };
       });
   };
 
