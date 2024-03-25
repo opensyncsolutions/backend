@@ -415,7 +415,7 @@ export class SharedService<T extends BaseEntity> {
               mandatory: !field.isNullable && !field.default,
               type: this.getColumnType(field.type.toString()),
               description: fieldSort[0],
-              sortOrder: fieldSort[1],
+              sortOrder: Number(fieldSort[1]),
               options: field?.enum?.map((option) => {
                 return {
                   name:
@@ -450,6 +450,9 @@ export class SharedService<T extends BaseEntity> {
           return 1;
         }
         return 0;
+      })
+      .map((column, index) => {
+        return { ...column, sortOrder: index };
       });
   };
 
