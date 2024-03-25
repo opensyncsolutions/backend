@@ -41,14 +41,14 @@ export class Enrollment extends DateEntity {
   @ApiPropertyOptional()
   studyId: string;
 
-  @Column({ name: 'ctcid', comment: 'CTC ID' })
+  @Column({ name: 'ctcid', comment: 'CTC ID__2' })
   @ApiProperty()
   ctcId: string;
 
   @Column({
     name: 'recentvisit',
     nullable: true,
-    comment: 'Recent Attended Visit',
+    comment: 'Recent Attended Visit__8',
   })
   @ApiPropertyOptional()
   recentVisit: Date;
@@ -64,7 +64,7 @@ export class Enrollment extends DateEntity {
   @Column({
     default: false,
     name: 'informedconsent',
-    comment: 'Informed Consent',
+    comment: 'Informed Consent__11',
   })
   @ApiPropertyOptional()
   informedConsent: boolean;
@@ -72,10 +72,18 @@ export class Enrollment extends DateEntity {
   @Column({
     default: false,
     name: 'followupconsent',
-    comment: 'Informed Followup Consent',
+    comment: 'Informed Followup Consent__12',
   })
   @ApiPropertyOptional()
   followupConsent: boolean;
+
+  @Column({
+    default: false,
+    name: 'mobileaccess',
+    comment: 'Do you have a mobile phone?__10',
+  })
+  @ApiPropertyOptional()
+  mobileAccess: boolean;
 
   @Column({
     default: false,
@@ -85,59 +93,59 @@ export class Enrollment extends DateEntity {
   @ApiPropertyOptional()
   fundsConfirmation: boolean;
 
-  @Column({ nullable: true, comment: 'Nearest Landmark' })
+  @Column({ nullable: true, comment: 'Nearest Landmark__20' })
   @ApiPropertyOptional()
   landmark: string;
 
-  @Column({ nullable: true, comment: 'Street/Village' })
+  @Column({ nullable: true, comment: 'Street/Village__19' })
   @ApiPropertyOptional()
   village: string;
 
-  @Column({ nullable: true, name: 'middlename', comment: 'Middle Name' })
+  @Column({ nullable: true, name: 'middlename', comment: 'Middle Name__15' })
   @ApiPropertyOptional()
   middleName: string;
 
-  @Column({ nullable: true, name: 'nickname', comment: 'Nick Name' })
+  @Column({ nullable: true, name: 'nickname', comment: 'Nick Name__17' })
   @ApiPropertyOptional()
   nickName: string;
 
-  @Column({ nullable: true, name: 'mothername', comment: "Mother's Name" })
+  @Column({ nullable: true, name: 'mothername', comment: "Mother's Name__18" })
   @ApiPropertyOptional()
   motherName: string;
 
-  @Column({ nullable: true, name: 'hbcname', comment: 'HBC Name' })
+  @Column({ nullable: true, name: 'hbcname', comment: 'HBC Name__4' })
   @ApiPropertyOptional()
   hbcName: string;
 
-  @Column({ nullable: true, name: 'hbcnumber', comment: 'HBC Number' })
+  @Column({ nullable: true, name: 'hbcnumber', comment: 'HBC Number__5' })
   @ApiPropertyOptional()
   hbcNumber: string;
 
-  @Column({ name: 'firstname', comment: 'First Name' })
+  @Column({ name: 'firstname', comment: 'First Name__14' })
   @ApiProperty()
   firstName: string;
 
-  @Column({ comment: 'Surname' })
+  @Column({ comment: 'Surname__16' })
   @ApiProperty()
   surname: string;
 
-  @Column({ comment: 'Date of Birth' })
+  @Column({ comment: 'Date of Birth__6' })
   @ApiProperty()
   dob: Date;
 
   @Column({
     nullable: true,
     name: 'enrollmentdate',
-    comment: 'Enrolled Date',
+    comment: 'Enrollment Date__1',
   })
   @ApiPropertyOptional()
   enrollmentDate: Date;
 
-  @Column({ nullable: true, name: 'screeningid', comment: 'Screening ID' })
+  @Column({ nullable: true, name: 'screeningid', comment: 'Screening ID__3' })
   @ApiPropertyOptional()
   screeningId: string;
 
-  @Column({ nullable: true, comment: 'Recent Scheduled Appointment' })
+  @Column({ nullable: true, comment: 'Recent Scheduled Appointment__9' })
   @ApiPropertyOptional()
   appointment: Date;
 
@@ -200,7 +208,7 @@ export class Enrollment extends DateEntity {
   @Column({
     nullable: true,
     name: 'mainconsentstudy',
-    comment: 'Study Consent',
+    comment: 'Study Consent__13',
   })
   @ApiPropertyOptional()
   mainConsentStudy: boolean;
@@ -229,7 +237,7 @@ export class Enrollment extends DateEntity {
   @ApiPropertyOptional()
   currentEnrolled: boolean;
 
-  @Column({ type: 'enum', enum: GENDER, comment: "Participant's Sex" })
+  @Column({ type: 'enum', enum: GENDER, comment: "Participant's Sex__7" })
   @ApiProperty({ enum: GENDER })
   gender: GENDER;
 

@@ -400,8 +400,8 @@ export class SharedService<T extends BaseEntity> {
       AUTHORITIES?.includes(this.entity['READ']) ||
       AUTHORITIES?.includes('ALL') ||
       this.entity['READ'] === 'ALL'
-    )
-      return this.repository.metadata.columns
+    ) {
+      const columns = this.repository.metadata.columns
         .map((field) => {
           if (
             field.type !== 'uuid' &&
@@ -409,11 +409,13 @@ export class SharedService<T extends BaseEntity> {
             field.propertyName !== 'updated' &&
             field.propertyName !== 'deleted'
           ) {
+            const fieldSort = (field.comment ?? '').split('__');
             return {
               name: field.propertyName,
               mandatory: !field.isNullable && !field.default,
               type: this.getColumnType(field.type.toString()),
-              description: field.comment,
+              description: fieldSort[0],
+              sortOrder: fieldSort[1],
               options: field?.enum?.map((option) => {
                 return {
                   name:
@@ -426,9 +428,29 @@ export class SharedService<T extends BaseEntity> {
           }
         })
         .filter((field) => field);
+      const columsnWithSort = columns.filter((column) => column.sortOrder);
+      const columsnWithoutSort = this.columsWithoutSort(columns);
+      return [...columsnWithSort, ...columsnWithoutSort];
+    }
     new UnauthorizedException(
       `You have no permission to view ${this.entity['plural']}`,
     );
+  };
+
+  private columsWithoutSort = (columns: any[]) => {
+    return columns
+      .filter((column: { sortOrder: any }) => !column.sortOrder)
+      .sort((a: { description: string }, b: { description: string }) => {
+        const descriptionA = a.description.toLowerCase();
+        const descriptionB = b.description.toLowerCase();
+        if (descriptionA < descriptionB) {
+          return -1;
+        }
+        if (descriptionA > descriptionB) {
+          return 1;
+        }
+        return 0;
+      });
   };
 
   private getColumnType = (type: string): string => {
