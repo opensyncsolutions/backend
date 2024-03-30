@@ -11,7 +11,6 @@ export * from './data/objective.entity';
 export * from './metadata/field.entity';
 export * from './metadata/form.entity';
 export * from './metadata/section.entity';
-export * from './data/enrollment.stage.entity';
 export * from './data/phone.entity';
 export * from './metadata/mobile.network.entity';
 export * from './data/followup.entity';
