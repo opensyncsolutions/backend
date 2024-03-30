@@ -378,6 +378,29 @@ export class SharedService<T extends BaseEntity> {
     return this.cleanData(XLSX.utils.sheet_to_json(sheet), payload);
   };
 
+  bulky = async ({
+    payload,
+    user,
+  }): Promise<{ message: string; summary: ImportSummary }> => {
+    const AUTHORITIES = USERAUTHORITIES(user);
+    if (
+      AUTHORITIES?.includes(this.entity['UPDATE']) ||
+      AUTHORITIES?.includes('ALL') ||
+      AUTHORITIES?.includes(this.Entity['ADD'])
+    ) {
+      const summary = await this.validateBulky(
+        this.cleanBulky(payload, user),
+        user,
+      );
+      return { message: 'Successfully', summary };
+    }
+    this.throwGenericError(
+      new UnauthorizedException(
+        `You have no permission to bulky update ${this.entity['plural']}`,
+      ),
+    );
+  };
+
   cleanData = (data: unknown[], payload: DataImportPayload) => {
     let sanitizedData = [];
     data.forEach((d: { [x: string]: { toString: () => any } }) => {
@@ -438,6 +461,19 @@ export class SharedService<T extends BaseEntity> {
     new UnauthorizedException(
       `You have no permission to view ${this.entity['plural']}`,
     );
+  };
+
+  private cleanBulky = (payload: T[], user: User) => {
+    let newPayload = [];
+    for (const data of payload) {
+      const cleanedData = this.cleanPayload(data);
+      if (!cleanedData['id']) {
+        newPayload = [...newPayload, cleanedData];
+      } else if (this.validatePayloadId(cleanedData)) {
+        newPayload = [...newPayload, cleanedData];
+      }
+    }
+    return sanitizeRequest(newPayload, user);
   };
 
   private columsWithoutSort = (columns: any[], start: number) => {

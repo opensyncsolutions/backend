@@ -10,7 +10,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { BloodCollection, EnrollmentStage, OrganisationUnit } from '..';
+import { BloodCollection, Eac, OrganisationUnit } from '..';
 import { ENROLLMENTSTATUS, GENDER } from '../../enums/enrollment.enum';
 import { throwError } from '../../helpers';
 import { DateEntity } from '../general/date.entity';
@@ -250,19 +250,19 @@ export class Enrollment extends DateEntity {
   @ApiProperty({ type: Objective })
   objective: Objective;
 
-  @OneToMany(() => EnrollmentStage, (stage) => stage.enrollment, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  stages: EnrollmentStage[];
-
   @OneToMany(() => Disbursement, (disbursement) => disbursement.enrollment, {
     cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   disbursements: Disbursement[];
+
+  @OneToMany(() => Eac, (eac) => eac.enrollment, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  eacs: Eac[];
 
   @OneToMany(
     () => BloodCollection,

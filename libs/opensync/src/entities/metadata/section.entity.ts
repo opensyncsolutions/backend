@@ -48,4 +48,10 @@ export class Section extends DateEntity {
   })
   @ApiPropertyOptional({ type: [Field] })
   fields: Field[];
+
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
+  description: string;
 }

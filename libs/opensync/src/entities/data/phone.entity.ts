@@ -12,19 +12,23 @@ export class Phone extends DateEntity {
   static DELETE: string = 'DELETE_PHONES';
   static UPDATE: string = 'UPDATE_PHONES';
 
-  @Column()
+  @Column({ name: 'phone', comment: 'Phone Number' })
   @ApiProperty()
   phone: string;
 
-  @Column({ default: true })
+  @Column({ default: true, comment: 'Is Personal?' })
   @ApiPropertyOptional()
   personal: boolean;
 
-  @Column({ default: false, name: 'mobilemoneyaccount' })
+  @Column({
+    default: false,
+    name: 'mobilemoneyaccount',
+    comment: 'Is Mobile Money Account?',
+  })
   @ApiPropertyOptional()
   mobileMoneyAccount: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Name' })
   @ApiPropertyOptional()
   name: string;
 

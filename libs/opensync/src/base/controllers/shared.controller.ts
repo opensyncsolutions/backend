@@ -319,4 +319,22 @@ export class SharedController<T extends BaseEntity> {
         .send({ error: errorSanitizer(e) });
     }
   }
+
+  @Post('bulky')
+  @UseGuards(SessionGuard)
+  async updateBulky(@Body() payload: T[], @Res() res: any, @Req() req: any) {
+    try {
+      const record = await this.service.bulky({
+        payload,
+        user: req.session.user,
+      });
+      return res
+        .status(HttpStatus.CREATED)
+        .send(sanitizeResponse(record, this.entity['plural']));
+    } catch (e) {
+      return res
+        .status(HttpStatus.BAD_REQUEST)
+        .send({ error: errorSanitizer(e) });
+    }
+  }
 }

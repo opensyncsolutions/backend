@@ -26,31 +26,31 @@ export class Disbursement extends DateEntity {
   @ApiProperty({ type: Network })
   mobileNetwork: Network;
 
-  @Column()
+  @Column({ comment: 'Amount__1' })
   @ApiProperty()
   amount: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Reference__2' })
   @ApiPropertyOptional()
   reference: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Result Code__3' })
   @ApiPropertyOptional()
   resultcode: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Transaction ID__4' })
   @ApiPropertyOptional()
   transid: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Result__5' })
   @ApiPropertyOptional()
   result: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Message__6' })
   @ApiPropertyOptional()
   message: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Utility Reference__7' })
   @ApiPropertyOptional()
   utilityref: string;
 }

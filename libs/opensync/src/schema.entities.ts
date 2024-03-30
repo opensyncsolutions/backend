@@ -1,6 +1,5 @@
 import {
   Enrollment,
-  EnrollmentStage,
   Field,
   Form,
   Network,
@@ -38,7 +37,6 @@ export const schemaEntities = [
   Form,
   Field,
   Section,
-  EnrollmentStage,
   Phone,
   Network,
   Followup,
