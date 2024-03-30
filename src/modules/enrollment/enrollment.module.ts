@@ -7,13 +7,10 @@ import {
   Eac,
   EacSession,
   Enrollment,
-  EnrollmentStage,
   Followup,
 } from '@app/opensync';
 import { EnrollmentController } from './controllers/enrollment.controller';
 import { EnrollmentService } from './services/enrollment.service';
-import { EnrollmentStageController } from './controllers/enrollmentstage.controller';
-import { EnrollmentStageService } from './services/enrollmentstage.service';
 import { FollowupController } from './controllers/followup.controller';
 import { FollowupService } from './services/followup.service';
 import { DisbursementController } from './controllers/disbursement.controller';
@@ -31,7 +28,6 @@ import { EacSessionService } from './services/eacsession.service';
   imports: [
     TypeOrmModule.forFeature([
       Enrollment,
-      EnrollmentStage,
       Followup,
       Disbursement,
       BloodCollection,
@@ -42,7 +38,6 @@ import { EacSessionService } from './services/eacsession.service';
   ],
   controllers: [
     EnrollmentController,
-    EnrollmentStageController,
     FollowupController,
     DisbursementController,
     BloodCollectionController,
@@ -52,7 +47,6 @@ import { EacSessionService } from './services/eacsession.service';
   ],
   providers: [
     EnrollmentService,
-    EnrollmentStageService,
     FollowupService,
     DisbursementService,
     BloodCollectionService,
