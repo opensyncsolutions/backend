@@ -454,7 +454,7 @@ export class SharedService<T extends BaseEntity> {
       const columnsWithSort = columns.filter((column) => column.sortOrder);
       const columnsWithoutSort = this.columsWithoutSort(
         columns,
-        columnsWithSort.length,
+        columnsWithSort?.length ?? 0,
       );
       return [...columnsWithSort, ...columnsWithoutSort];
     }

@@ -237,10 +237,10 @@ const getORFIlter = (
       Object.keys(f)?.includes(include),
     );
     filters = filters?.filter((f) => !Object.keys(f)?.includes(include));
-    if (filterInclude.length > 1) {
+    if (filterInclude?.length > 1) {
       filterInclude = filterInclude.filter((f) => hasIdKey(f));
     }
-    if (filterInclude.length) {
+    if (filterInclude?.length) {
       filters = filters.map((f) => {
         return { ...f, ...mergeFilters(filterInclude, payload) };
       });

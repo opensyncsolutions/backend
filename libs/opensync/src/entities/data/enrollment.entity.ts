@@ -339,7 +339,7 @@ export class Enrollment extends DateEntity {
       ];
     }
 
-    if (messages.length) {
+    if (messages?.length) {
       throwError(new BadRequestException(messages.join(', ')));
     }
   }

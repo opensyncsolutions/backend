@@ -32,8 +32,8 @@ export class Objective extends NameEntity {
 
   @BeforeInsert()
   async beforeInsert() {
-    if (!this.organisationUnits.length) {
-      throwError(new NotFoundException('Organisation Unit cannot be null'));
+    if (!this.organisationUnits?.length) {
+      throwError(new NotFoundException('Organisation Units cannot be null'));
     }
     let messages = [];
     for (const organisationUnit of this.organisationUnits) {
@@ -53,8 +53,8 @@ export class Objective extends NameEntity {
         ];
       }
     }
-    if (messages.length) {
-      throwError(new BadRequestException(messages.join(', ')));
+    if (messages?.length) {
+      throwError(new BadRequestException(messages?.join(', ')));
     }
   }
 }

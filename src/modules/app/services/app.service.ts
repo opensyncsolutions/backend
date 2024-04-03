@@ -101,8 +101,8 @@ export class AppService {
   };
 
   private createFolders = async (file: any, path: string) => {
-    const files = file.name.split('/');
-    if (files.length === 2) {
+    const files = file?.name?.split('/');
+    if (files?.length === 2) {
       await this.createSingleFile(file, files[0], path);
     } else {
       await this.createRecursiveFiles(file, files, path);
