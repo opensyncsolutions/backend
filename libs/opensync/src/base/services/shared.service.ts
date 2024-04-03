@@ -491,7 +491,10 @@ export class SharedService<T extends BaseEntity> {
         return 0;
       })
       .map((column, index) => {
-        return { ...column, sortOrder: start + index };
+        return {
+          ...column,
+          sortOrder: column.name == 'code' ? 100 : start + index,
+        };
       });
   };
 

@@ -28,7 +28,7 @@ export class DateEntity extends BaseEntity {
   @ApiPropertyOptional()
   deleted: Date;
 
-  @Column({ nullable: true, unique: true })
+  @Column({ nullable: true, unique: true, comment: 'Optional Unique Code' })
   @ApiPropertyOptional()
   code: string;
 
