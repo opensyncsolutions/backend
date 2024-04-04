@@ -27,6 +27,10 @@ export class Field extends NameEntity {
   @ApiProperty()
   validation: string;
 
+  @Column({ nullable: true })
+  @ApiProperty()
+  displayInList: boolean;
+
   @Column({ default: false })
   @ApiPropertyOptional()
   mandatory: boolean;
