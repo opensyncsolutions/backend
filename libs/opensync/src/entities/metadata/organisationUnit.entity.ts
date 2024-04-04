@@ -21,7 +21,7 @@ export class OrganisationUnit extends NameEntity {
   static DELETE = 'DELETE_ORGANISATIONUNITS';
   static UPDATE = 'UPDATE_ORGANISATIONUNITS';
 
-  @Column({ name: 'shortname' })
+  @Column({ name: 'shortname', comment: 'Short Name' })
   @ApiProperty()
   shortName: string;
 
@@ -29,19 +29,23 @@ export class OrganisationUnit extends NameEntity {
   @ApiProperty()
   path: string;
 
-  @Column({ name: 'openingdate', default: '1970-01-01' })
+  @Column({
+    name: 'openingdate',
+    default: '1970-01-01',
+    comment: 'Opening Date',
+  })
   @ApiPropertyOptional()
   openingDate: Date;
 
-  @Column({ default: true })
+  @Column({ default: true, comment: 'Active' })
   @ApiPropertyOptional()
   active: boolean;
 
-  @Column()
+  @Column({ comment: 'Level' })
   @ApiPropertyOptional()
   level: number;
 
-  @Column({ default: false })
+  @Column({ default: false, comment: 'Allow Data Entry?' })
   @ApiPropertyOptional()
   data: boolean;
 

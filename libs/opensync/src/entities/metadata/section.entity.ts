@@ -8,10 +8,10 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Field, Form } from '..';
-import { DateEntity } from '../general/date.entity';
+import { NameEntity } from '../general/named.entity';
 
 @Entity('section')
-export class Section extends DateEntity {
+export class Section extends NameEntity {
   static plural = 'sections';
   static READ = 'READ_SECTIONS';
   static ADD = 'ADD_SECTIONS';
@@ -48,10 +48,4 @@ export class Section extends DateEntity {
   })
   @ApiPropertyOptional({ type: [Field] })
   fields: Field[];
-
-  @Column()
-  name: string;
-
-  @Column({ nullable: true })
-  description: string;
 }

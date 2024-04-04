@@ -10,23 +10,23 @@ export class Network extends NameEntity {
   static DELETE = 'DELETE_NETWORKS';
   static UPDATE = 'UPDATE_NETWORKS';
 
-  @Column()
+  @Column({ comment: 'Network Operator' })
   @ApiProperty()
   operator: string;
 
-  @Column()
+  @Column({ comment: 'Transaction Fee' })
   @ApiProperty()
   fee: number;
 
-  @Column()
+  @Column({ comment: 'Cash' })
   @ApiProperty()
   cash: number;
 
-  @Column()
+  @Column({ comment: 'Status' })
   @ApiProperty()
   status: string;
 
-  @Column()
+  @Column({ comment: 'Utility Code' })
   @ApiProperty()
   utilitycode: string;
 }

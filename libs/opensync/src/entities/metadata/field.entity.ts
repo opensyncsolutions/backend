@@ -23,15 +23,15 @@ export class Field extends NameEntity {
   @ApiProperty()
   value: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Optional Field Validation' })
   @ApiProperty()
   validation: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: 'Display Field In List' })
   @ApiProperty()
   displayInList: boolean;
 
-  @Column({ default: false })
+  @Column({ default: false, comment: 'Is The Field Mandatory' })
   @ApiPropertyOptional()
   mandatory: boolean;
 
@@ -39,7 +39,7 @@ export class Field extends NameEntity {
   @ApiPropertyOptional()
   sortOrder: number;
 
-  @Column({ type: 'enum', enum: FIELDTYPE })
+  @Column({ type: 'enum', enum: FIELDTYPE, comment: 'Field Type' })
   @ApiProperty()
   type: FIELDTYPE;
 }
