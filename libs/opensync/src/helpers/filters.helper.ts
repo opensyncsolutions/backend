@@ -54,6 +54,7 @@ const getRelations = (fields: string[], metaData: EntityMetadata): string[] => {
   let relations = fields.filter(
     (field) => entityRelations?.includes(field) || field?.includes('.'),
   );
+
   if (fields.includes('*')) {
     relations = [...new Set([...relations, ...entityRelations])];
   }

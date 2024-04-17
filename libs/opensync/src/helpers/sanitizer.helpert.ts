@@ -141,7 +141,12 @@ export const errorSanitizer = (error: {
 };
 
 const selectedFields = (fields: string, key: string): boolean => {
-  if (!fields || fields === '*') return true;
+  if (
+    !fields ||
+    fields === '*' ||
+    (typeof fields === 'string' && fields.includes('*'))
+  )
+    return true;
   return fields.split(',').find((field) => field.includes(key)) !== undefined;
 };
 
