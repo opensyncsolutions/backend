@@ -59,11 +59,16 @@ export class OrganisationUnit extends NameEntity {
 
   @BeforeInsert()
   async beforeInsertTransaction() {
+    if (!this.parent?.id && !APPENV.ALLOWROOTS) {
+      throw new BadRequestException('Missing organisationUnit parent');
+    }
+
     this.id = this.id || uuidv4();
     this.path = this.id;
     if (!this.shortName) {
       this.shortName = this.name;
     }
+
     if ((!this.level || this.level > 1) && !APPENV.ALLOWROOTS) {
       const parent = await OrganisationUnit.findOne({
         where: { id: this.parent?.id },
