@@ -23,9 +23,13 @@ export class Field extends NameEntity {
   @ApiProperty()
   value: string;
 
-  @Column({ nullable: true, name: 'futuredate' })
+  @Column({ nullable: true, name: 'futuredate', default: false })
   @ApiProperty()
   futureDate: boolean;
+
+  @Column({ nullable: true, name: 'pastdate', default: true })
+  @ApiProperty()
+  pastDate: boolean;
 
   @Column({ nullable: true, comment: 'Optional Field Validation' })
   @ApiProperty()
