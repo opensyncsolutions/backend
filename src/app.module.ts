@@ -12,6 +12,7 @@ import { NetworkModule } from './modules/network/network.module';
 import { ObjectiveModule } from './modules/objective/objective.module';
 import { OrganisationUnitModule } from './modules/organisationunit/organisationUnit.module';
 import { PhoneModule } from './modules/phone/phone.module';
+import { EnrollmentAnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PhoneModule } from './modules/phone/phone.module';
     NetworkModule,
     MenuModule,
     OpenSyncAppModule,
+    EnrollmentAnalyticsModule,
   ],
 })
 export class AppModule {}

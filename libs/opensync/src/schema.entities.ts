@@ -21,6 +21,7 @@ import {
   Eac,
   EacSession,
   Menu,
+  EnrollmentAnalytics,
 } from './entities';
 
 export const schemaEntities = [
@@ -46,4 +47,5 @@ export const schemaEntities = [
   Eac,
   EacSession,
   Menu,
+  EnrollmentAnalytics,
 ];

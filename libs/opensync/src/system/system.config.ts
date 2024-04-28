@@ -107,7 +107,7 @@ export const SYSTEM = async () => {
         value: entity.DELETE,
         system: true,
       },
-    ];
+    ].filter((privilege) => privilege.value && privilege.value !== '');
   }
 
   Privilege.createPrivileges(privileges);
