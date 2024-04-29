@@ -26,7 +26,7 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
       );
 
       await this.repository.query(`
-      INSERT INTO enrollmentanalytics_temp (id, enrollments, ou, created, updated)
+      INSERT INTO enrollmentanalytics_temp (id, enrollments, eligible, non, ou, created, updated)
       SELECT
       uuid_generate_v4() AS id,
       COUNT(*) AS enrollments,
