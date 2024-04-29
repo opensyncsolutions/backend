@@ -50,7 +50,7 @@ export class ObjectiveService extends SharedService<Objective> {
         return {
           ...w,
           organisationUnit: {
-            path: In(
+            ouPath: In(
               (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
                 ILike(`%${organisationUnit.id}%`),
               ),
@@ -61,7 +61,7 @@ export class ObjectiveService extends SharedService<Objective> {
     return {
       ...(where || {}),
       organisationUnit: {
-        path: In(
+        ouPath: In(
           (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
             ILike(`%${organisationUnit.id}%`),
           ),

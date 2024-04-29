@@ -164,6 +164,7 @@ const sanitizeObject = (
       'email',
       'phoneNumber',
       'secret',
+      'ouPath',
     ]),
   );
   attributeKeys.forEach((attributeKey) => {
@@ -217,6 +218,7 @@ const sanitizeRequestObject = (
       'level',
       'updated',
       'created',
+      'ouPath',
     ]),
   );
 

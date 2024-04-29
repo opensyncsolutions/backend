@@ -45,7 +45,7 @@ export class EnrollmentService extends SharedService<Enrollment> {
           ...w,
           organisationUnit: {
             ...(w?.organisationUnit || {}),
-            path: In(
+            ouPath: In(
               (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
                 ILike(`%'${organisationUnit.id}'%`),
               ),
@@ -57,7 +57,7 @@ export class EnrollmentService extends SharedService<Enrollment> {
       ...(where || {}),
       organisationUnit: {
         ...(where ? where['organisationUnit'] || {} : {}),
-        path: In(
+        ouPath: In(
           (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
             ILike(`%'${organisationUnit.id}'%`),
           ),

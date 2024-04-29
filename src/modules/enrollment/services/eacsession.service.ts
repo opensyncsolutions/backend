@@ -48,7 +48,7 @@ export class EacSessionService extends SharedService<EacSession> {
             enrollment: {
               ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
               organisationUnit: {
-                path: In(
+                ouPath: In(
                   (payload?.user?.organisationUnits ?? []).map(
                     (organisationUnit) => ILike(`%${organisationUnit.id}%`),
                   ),
@@ -65,7 +65,7 @@ export class EacSessionService extends SharedService<EacSession> {
         enrollment: {
           ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
           organisationUnit: {
-            path: In(
+            ouPath: In(
               (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
                 ILike(`%${organisationUnit.id}%`),
               ),

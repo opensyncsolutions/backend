@@ -25,9 +25,9 @@ export class OrganisationUnit extends NameEntity {
   @ApiProperty()
   shortName: string;
 
-  @Column()
+  @Column({ name: 'oupath', comment: 'Organisation Unit Path' })
   @ApiProperty()
-  path: string;
+  ouPath: string;
 
   @Column({
     name: 'openingdate',
@@ -64,7 +64,7 @@ export class OrganisationUnit extends NameEntity {
     }
 
     this.id = this.id || uuidv4();
-    this.path = this.id;
+    this.ouPath = this.id;
     if (!this.shortName) {
       this.shortName = this.name;
     }
@@ -78,7 +78,7 @@ export class OrganisationUnit extends NameEntity {
         throw new BadRequestException('Missing organisationUnit parent');
 
       this.level = parent.level + 1;
-      this.path = `${parent.path}/${this.id}`;
+      this.ouPath = `${parent.ouPath}/${this.id}`;
     }
 
     if (!this.parent?.id && APPENV.ALLOWROOTS) {
@@ -93,7 +93,7 @@ export class OrganisationUnit extends NameEntity {
       if (!parent)
         throw new BadRequestException('Missing organisationUnit parent');
       this.level = parent.level + 1;
-      this.path = `${parent.path}/${this.id}`;
+      this.ouPath = `${parent.ouPath}/${this.id}`;
     }
   }
 

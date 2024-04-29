@@ -46,7 +46,7 @@ export class BloodCollectionService extends SharedService<BloodCollection> {
           enrollment: {
             ...(w.enrollment || {}),
             organisationUnit: {
-              path: In(
+              ouPath: In(
                 (payload?.user?.organisationUnits ?? []).map(
                   (organisationUnit) => ILike(`%${organisationUnit.id}%`),
                 ),
@@ -60,7 +60,7 @@ export class BloodCollectionService extends SharedService<BloodCollection> {
       enrollment: {
         ...(where['enrollment'] || {}),
         organisationUnit: {
-          path: In(
+          ouPath: In(
             (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
               ILike(`%${organisationUnit.id}%`),
             ),

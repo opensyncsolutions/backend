@@ -15,7 +15,7 @@ export class OrganisationUnitService extends SharedService<OrganisationUnit> {
   updateEntity = async (
     payload: OrganisationUnit,
   ): Promise<OrganisationUnit> => {
-    delete payload['path'];
+    delete payload['ouPath'];
     const user = payload['user'];
     const existingRecord = await this.findOneOrFailInternal({
       id: payload['id'],
@@ -31,7 +31,7 @@ export class OrganisationUnitService extends SharedService<OrganisationUnit> {
         id: payload.parent.id,
       });
       sanitizedPayload.level = parent.level + 1;
-      sanitizedPayload.path = `${parent.path}/${payload.id}`;
+      sanitizedPayload.ouPath = `${parent.ouPath}/${payload.id}`;
     }
     payload = this.repository.create({
       ...sanitizedPayload,
