@@ -20,10 +20,18 @@ export class DisbursementService extends SharedService<Disbursement> {
 
   getMany = async (body: GetManySanitized): Promise<any> => {
     const { payload } = body;
+    if (!(payload?.user?.organisationUnits ?? []).length) {
+      return {
+        page: payload.page + 1,
+        total: 0,
+        pageSize: payload.pageSize,
+        [this.entity['plural']]: [],
+      };
+    }
     const [data, total] = await this.repository.findAndCount({
       select: this.getSelections(payload.fields),
       relations: this.getRelations(payload.fields),
-      where: this.sanitizeWhere(getWhereConditions(payload), payload),
+      where: this.sanitizeWhere(getWhereConditions(payload), payload) as any,
       skip: payload.pageSize * payload.page,
       take: payload.pageSize,
       order: this.getOrder(payload.order),
@@ -37,30 +45,35 @@ export class DisbursementService extends SharedService<Disbursement> {
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (Array.isArray(where))
-      return where.map((w) => {
-        return {
-          ...w,
-          enrollment: {
-            ...(w.enrollment || {}),
-            organisationUnit: {
-              ouPath: Like(
-                `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-              ),
+    if (Array.isArray(where)) {
+      return (payload?.user?.organisationUnits ?? []).map(
+        (organisationUnit) => {
+          return where.map((w) => ({
+            ...w,
+            enrollment: {
+              ...(w.enrollment ?? {}),
+              organisationUnit: {
+                ...(w?.enrollment?.organisationUnit ?? {}),
+                ouPath: Like(`%${organisationUnit.id}%`),
+              },
             },
-          },
-        };
-      });
-    return {
-      ...(where || {}),
-      enrollment: {
-        ...(where ? where['enrollment'] || {} : {}),
-        organisationUnit: {
-          ouPath: Like(
-            `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-          ),
+          }));
         },
-      },
-    };
+      );
+    }
+    return (payload?.user?.organisationUnits ?? []).map((organisationUnit) => {
+      return {
+        ...(where || {}),
+        enrollment: {
+          ...(where ? where['enrollment'] ?? {} : {}),
+          organisationUnit: {
+            ...(where && where['enrollment']
+              ? where['enrollment']['organisationUnit'] ?? {}
+              : {}),
+            ouPath: Like(`%${organisationUnit.id}%`),
+          },
+        },
+      };
+    });
   };
 }

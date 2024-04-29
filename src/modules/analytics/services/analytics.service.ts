@@ -20,10 +20,18 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
 
   getMany = async (body: GetManySanitized): Promise<any> => {
     const { payload } = body;
+    if (!(payload?.user?.organisationUnits ?? []).length) {
+      return {
+        page: payload.page + 1,
+        total: 0,
+        pageSize: payload.pageSize,
+        [this.entity['plural']]: [],
+      };
+    }
     const [data, total] = await this.repository.findAndCount({
       select: this.getSelections(payload.fields),
       relations: this.getRelations(payload.fields),
-      where: this.sanitizeWhere(getWhereConditions(payload), payload),
+      where: this.sanitizeWhere(getWhereConditions(payload), payload) as any,
       skip: payload.pageSize * payload.page,
       take: payload.pageSize,
       order: this.getOrder(payload.order),
@@ -37,27 +45,28 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (Array.isArray(where))
-      return where.map((w) => {
-        return {
-          ...w,
-          organisationUnit: {
-            ...(w?.organisationUnit || {}),
-            ouPath: Like(
-              `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-            ),
-          },
-        };
-      });
-    return {
-      ...(where || {}),
-      organisationUnit: {
-        ...(where ? where['organisationUnit'] || {} : {}),
-        ouPath: Like(
-          `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-        ),
-      },
-    };
+    if (Array.isArray(where)) {
+      return (payload?.user?.organisationUnits ?? []).map(
+        (organisationUnit) => {
+          return where.map((w) => ({
+            organisationUnit: {
+              ...(w.organisationUnit || {}),
+              ouPath: Like(`%${organisationUnit.id}%`),
+            },
+            ...w,
+          }));
+        },
+      );
+    }
+    return (payload?.user?.organisationUnits ?? []).map((organisationUnit) => {
+      return {
+        ...(where ?? {}),
+        organisationUnit: {
+          ...(where ? where['organisationUnit'] ?? {} : {}),
+          ouPath: Like(`%${organisationUnit.id}%`),
+        },
+      };
+    });
   };
 
   generateAnalytics = async (): Promise<void> => {

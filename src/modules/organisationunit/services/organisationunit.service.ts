@@ -1,6 +1,3 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, TreeRepository } from 'typeorm';
 import {
   GetManyReqInterface,
   GetManySanitized,
@@ -8,6 +5,9 @@ import {
   SharedService,
   getWhereConditions,
 } from '@app/opensync';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Like, TreeRepository } from 'typeorm';
 
 @Injectable()
 export class OrganisationUnitService extends SharedService<OrganisationUnit> {
@@ -67,10 +67,18 @@ export class OrganisationUnitService extends SharedService<OrganisationUnit> {
 
   getMany = async (body: GetManySanitized): Promise<any> => {
     const { payload } = body;
+    if (!(payload?.user?.organisationUnits ?? []).length) {
+      return {
+        page: payload.page + 1,
+        total: 0,
+        pageSize: payload.pageSize,
+        organisationUnits: [],
+      };
+    }
     const [data, total] = await this.repository.findAndCount({
       select: this.getSelections(payload.fields),
       relations: this.getRelations(payload.fields),
-      where: this.sanitizeWhere(getWhereConditions(payload), payload),
+      where: this.sanitizeWhere(getWhereConditions(payload), payload) as any,
       skip: payload.pageSize * payload.page,
       take: payload.pageSize,
       order: this.getOrder(payload.order),
@@ -79,25 +87,26 @@ export class OrganisationUnitService extends SharedService<OrganisationUnit> {
       page: payload.page + 1,
       total,
       pageSize: payload.pageSize,
-      [this.entity['plural']]: data,
+      organisationUnits: data,
     };
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (Array.isArray(where))
-      return where.map((w) => {
-        return {
-          ...w,
-          ouPath: Like(
-            `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-          ),
-        };
-      });
-    return {
-      ...(where || {}),
-      ouPath: Like(
-        `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-      ),
-    };
+    if (Array.isArray(where)) {
+      return (payload?.user?.organisationUnits ?? []).map(
+        (organisationUnit) => {
+          return where.map((w) => ({
+            ouPath: Like(`%${organisationUnit.id}%`),
+            ...w,
+          }));
+        },
+      );
+    }
+    return (payload?.user?.organisationUnits ?? []).map((organisationUnit) => {
+      return {
+        ...(where || {}),
+        ouPath: Like(`%${organisationUnit.id}%`),
+      };
+    });
   };
 }

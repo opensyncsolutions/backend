@@ -20,10 +20,18 @@ export class EacSessionService extends SharedService<EacSession> {
 
   getMany = async (body: GetManySanitized): Promise<any> => {
     const { payload } = body;
+    if (!(payload?.user?.organisationUnits ?? []).length) {
+      return {
+        page: payload.page + 1,
+        total: 0,
+        pageSize: payload.pageSize,
+        [this.entity['plural']]: [],
+      };
+    }
     const [data, total] = await this.repository.findAndCount({
       select: this.getSelections(payload.fields),
       relations: this.getRelations(payload.fields),
-      where: this.sanitizeWhere(getWhereConditions(payload), payload),
+      where: this.sanitizeWhere(getWhereConditions(payload), payload) as any,
       skip: payload.pageSize * payload.page,
       take: payload.pageSize,
       order: this.getOrder(payload.order),
@@ -37,36 +45,41 @@ export class EacSessionService extends SharedService<EacSession> {
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (Array.isArray(where))
-      return where.map((w) => {
-        return {
-          ...w,
-          eac: {
-            ...(w.eac || {}),
-            enrollment: {
-              ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
-              organisationUnit: {
-                ouPath: Like(
-                  `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-                ),
+    if (Array.isArray(where)) {
+      return (payload?.user?.organisationUnits ?? []).map(
+        (organisationUnit) => {
+          return where.map((w) => ({
+            ...w,
+            eac: {
+              ...(w.eac || {}),
+              enrollment: {
+                ...(w?.eac?.enrollment?.organisationUnit ?? {}),
+                organisationUnit: {
+                  ...(w?.eac?.enrollment?.organisationUnit ?? {}),
+                  ouPath: Like(`%${organisationUnit.id}%`),
+                },
               },
             },
-          },
-        };
-      });
-    return {
-      ...(where || {}),
-      eac: {
-        ...(where['eac'] || {}),
-        enrollment: {
-          ...(where && where['eac'] ? where['eac']['enrollment'] || {} : {}),
-          organisationUnit: {
-            ouPath: Like(
-              `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
-            ),
+          }));
+        },
+      );
+    }
+    return (payload?.user?.organisationUnits ?? []).map((organisationUnit) => {
+      return {
+        ...(where ?? {}),
+        eac: {
+          ...(where ? where['eac'] ?? {} : {}),
+          enrollment: {
+            ...(where ? where['eac']?.enrollment ?? {} : {}),
+            organisationUnit: {
+              ...(where
+                ? where['eac']?.enrollment?.organisationUnit ?? {}
+                : {}),
+              ouPath: Like(`%${organisationUnit.id}%`),
+            },
           },
         },
-      },
-    };
+      };
+    });
   };
 }
