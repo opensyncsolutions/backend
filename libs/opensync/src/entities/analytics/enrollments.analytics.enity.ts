@@ -34,10 +34,10 @@ export class EnrollmentAnalytics extends BaseEntity {
   @Column()
   enrollments: number;
 
-  @Column()
+  @Column({ comment: 'Eligible' })
   eligible: number;
 
-  @Column()
+  @Column({ comment: 'Non-Eligible' })
   non: number;
 
   @OneToOne(() => OrganisationUnit, (organisationUnit) => organisationUnit, {})
