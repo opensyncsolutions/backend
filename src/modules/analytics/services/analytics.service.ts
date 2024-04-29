@@ -28,8 +28,10 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
       await this.repository.query(`
       INSERT INTO enrollmentanalytics_temp (id, enrollments, ou, created, updated)
       SELECT
-      ou AS id,
+      uuid_generate_v4() AS id,
       COUNT(*) AS enrollments,
+      COUNT(*) AS eligible,
+      COUNT(*) AS non,
       ou,
       CURRENT_TIMESTAMP AS created,
       CURRENT_TIMESTAMP AS updated
@@ -37,7 +39,6 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
       enrollment
       GROUP BY
       ou;
-
   `);
 
       await this.repository.query(`DROP TABLE enrollmentanalytics;`);

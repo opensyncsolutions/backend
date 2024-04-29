@@ -34,6 +34,12 @@ export class EnrollmentAnalytics extends BaseEntity {
   @Column()
   enrollments: number;
 
+  @Column()
+  eligible: number;
+
+  @Column()
+  non: number;
+
   @OneToOne(() => OrganisationUnit, (organisationUnit) => organisationUnit, {})
   @JoinColumn({ name: 'ou' })
   organisationUnit: OrganisationUnit;
