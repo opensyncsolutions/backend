@@ -54,7 +54,7 @@ export class EacService extends SharedService<Eac> {
     return {
       ...(where || {}),
       enrollment: {
-        ...(where['enrollment'] || {}),
+        ...(where ? where['enrollment'] || {} : {}),
         organisationUnit: {
           ouPath: Like(
             `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,

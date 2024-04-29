@@ -54,7 +54,7 @@ export class BloodCollectionService extends SharedService<BloodCollection> {
     return {
       ...(where || {}),
       enrollment: {
-        ...(where['enrollment'] || {}),
+        ...(where ? where['enrollment'] || {} : {}),
         organisationUnit: {
           ouPath: Like(
             `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,

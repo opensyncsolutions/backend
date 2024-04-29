@@ -59,7 +59,7 @@ export class EacSessionService extends SharedService<EacSession> {
       eac: {
         ...(where['eac'] || {}),
         enrollment: {
-          ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
+          ...(where && where['eac'] ? where['eac']['enrollment'] || {} : {}),
           organisationUnit: {
             ouPath: Like(
               `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,

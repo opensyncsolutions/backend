@@ -54,7 +54,7 @@ export class DataCollectionService extends SharedService<DataCollection> {
     return {
       ...(where || {}),
       enrollment: {
-        ...(where['enrollment'] || {}),
+        ...(where ? where['enrollment'] || {} : {}),
         organisationUnit: {
           ouPath: Like(
             `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
