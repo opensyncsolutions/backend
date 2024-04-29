@@ -3,12 +3,11 @@ import {
   GetManyReqInterface,
   GetManySanitized,
   SharedService,
-  USERAUTHORITIES,
   getWhereConditions,
 } from '@app/opensync';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, In, TreeRepository } from 'typeorm';
+import { Like, TreeRepository } from 'typeorm';
 
 @Injectable()
 export class EnrollmentService extends SharedService<Enrollment> {
@@ -38,17 +37,14 @@ export class EnrollmentService extends SharedService<Enrollment> {
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (USERAUTHORITIES(payload.user).includes('ALL')) return where;
     if (Array.isArray(where))
       return where.map((w) => {
         return {
           ...w,
           organisationUnit: {
             ...(w?.organisationUnit || {}),
-            ouPath: In(
-              (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
-                ILike(`%'${organisationUnit.id}'%`),
-              ),
+            ouPath: Like(
+              `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
             ),
           },
         };
@@ -57,10 +53,8 @@ export class EnrollmentService extends SharedService<Enrollment> {
       ...(where || {}),
       organisationUnit: {
         ...(where ? where['organisationUnit'] || {} : {}),
-        ouPath: In(
-          (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
-            ILike(`%'${organisationUnit.id}'%`),
-          ),
+        ouPath: Like(
+          `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
         ),
       },
     };

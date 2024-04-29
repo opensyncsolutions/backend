@@ -1,14 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, In, TreeRepository } from 'typeorm';
 import {
   EacSession,
   GetManyReqInterface,
   GetManySanitized,
   SharedService,
-  USERAUTHORITIES,
   getWhereConditions,
 } from '@app/opensync';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Like, TreeRepository } from 'typeorm';
 
 @Injectable()
 export class EacSessionService extends SharedService<EacSession> {
@@ -38,7 +37,6 @@ export class EacSessionService extends SharedService<EacSession> {
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
-    if (USERAUTHORITIES(payload.user).includes('ALL')) return where;
     if (Array.isArray(where))
       return where.map((w) => {
         return {
@@ -48,10 +46,8 @@ export class EacSessionService extends SharedService<EacSession> {
             enrollment: {
               ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
               organisationUnit: {
-                ouPath: In(
-                  (payload?.user?.organisationUnits ?? []).map(
-                    (organisationUnit) => ILike(`%${organisationUnit.id}%`),
-                  ),
+                ouPath: Like(
+                  `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
                 ),
               },
             },
@@ -65,10 +61,8 @@ export class EacSessionService extends SharedService<EacSession> {
         enrollment: {
           ...(where['eac'] ? where['eac']['enrollment'] || {} : {}),
           organisationUnit: {
-            ouPath: In(
-              (payload?.user?.organisationUnits ?? []).map((organisationUnit) =>
-                ILike(`%${organisationUnit.id}%`),
-              ),
+            ouPath: Like(
+              `%${(payload?.user?.organisationUnits ?? []).map((organisationUnit) => organisationUnit.id).join('%')}%`,
             ),
           },
         },
