@@ -55,8 +55,8 @@ export class EacSessionService extends SharedService<EacSession> {
               enrollment: {
                 ...(w?.eac?.enrollment?.organisationUnit ?? {}),
                 organisationUnit: {
-                  ...(w?.eac?.enrollment?.organisationUnit ?? {}),
                   ouPath: Like(`%${organisationUnit.id}%`),
+                  ...(w?.eac?.enrollment?.organisationUnit ?? {}),
                 },
               },
             },
@@ -72,10 +72,10 @@ export class EacSessionService extends SharedService<EacSession> {
           enrollment: {
             ...(where ? where['eac']?.enrollment ?? {} : {}),
             organisationUnit: {
+              ouPath: Like(`%${organisationUnit.id}%`),
               ...(where
                 ? where['eac']?.enrollment?.organisationUnit ?? {}
                 : {}),
-              ouPath: Like(`%${organisationUnit.id}%`),
             },
           },
         },

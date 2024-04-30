@@ -53,8 +53,8 @@ export class BloodCollectionService extends SharedService<BloodCollection> {
             enrollment: {
               ...(w.enrollment ?? {}),
               organisationUnit: {
-                ...(w?.enrollment?.organisationUnit ?? {}),
                 ouPath: Like(`%${organisationUnit.id}%`),
+                ...(w?.enrollment?.organisationUnit ?? {}),
               },
             },
           }));
@@ -67,10 +67,10 @@ export class BloodCollectionService extends SharedService<BloodCollection> {
         enrollment: {
           ...(where ? where['enrollment'] ?? {} : {}),
           organisationUnit: {
+            ouPath: Like(`%${organisationUnit.id}%`),
             ...(where && where['enrollment']
               ? where['enrollment']['organisationUnit'] ?? {}
               : {}),
-            ouPath: Like(`%${organisationUnit.id}%`),
           },
         },
       };

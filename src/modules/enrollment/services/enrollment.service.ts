@@ -50,8 +50,8 @@ export class EnrollmentService extends SharedService<Enrollment> {
         (organisationUnit) => {
           return where.map((w) => ({
             organisationUnit: {
-              ...(w.organisationUnit || {}),
               ouPath: Like(`%${organisationUnit.id}%`),
+              ...(w.organisationUnit || {}),
             },
             ...w,
           }));
@@ -62,8 +62,8 @@ export class EnrollmentService extends SharedService<Enrollment> {
       return {
         ...(where ?? {}),
         organisationUnit: {
-          ...(where ? where['organisationUnit'] ?? {} : {}),
           ouPath: Like(`%${organisationUnit.id}%`),
+          ...(where ? where['organisationUnit'] ?? {} : {}),
         },
       };
     });

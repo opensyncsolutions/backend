@@ -53,10 +53,10 @@ export class FollowupService extends SharedService<Followup> {
             enrollment: {
               ...(w.enrollment || {}),
               organisationUnit: {
+                ouPath: Like(`%${organisationUnit.id}%`),
                 ...(w['enrollment']
                   ? w['enrollment']['organisationUnit'] ?? {}
                   : {}),
-                ouPath: Like(`%${organisationUnit.id}%`),
               },
             },
           }));
@@ -69,10 +69,10 @@ export class FollowupService extends SharedService<Followup> {
         enrollment: {
           ...(where ? where['enrollment'] ?? {} : {}),
           organisationUnit: {
+            ouPath: Like(`%${organisationUnit.id}%`),
             ...(where && where['enrollment']
               ? where['enrollment']['organisationUnit'] ?? {}
               : {}),
-            ouPath: Like(`%${organisationUnit.id}%`),
           },
         },
       };
