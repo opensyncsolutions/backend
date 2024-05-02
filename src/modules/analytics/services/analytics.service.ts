@@ -87,8 +87,8 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
       SELECT
       uuid_generate_v4() AS id,
       COUNT(*) AS enrollments,
-      COUNT(*) AS eligible,
-      COUNT(*) AS non,
+      COUNT(CASE WHEN EXTRACT(YEAR FROM age(dob)) >= 18 AND recentvisit >= recentvisit - interval '28 days' THEN 1 END) AS eligible,
+      COUNT(CASE WHEN EXTRACT(YEAR FROM age(dob)) < 18 OR recentvisit < recentvisit - interval '28 days' THEN 1 END) AS non,
       ou,
       CURRENT_TIMESTAMP AS created,
       CURRENT_TIMESTAMP AS updated

@@ -53,10 +53,9 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
   if (APPENV.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
-      .setTitle('opensync')
+      .setTitle('OpenSYNC')
       .setVersion('1.0')
       .build();
 
