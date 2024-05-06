@@ -1,22 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, TreeRepository } from 'typeorm';
 import {
   EnrollmentAnalytics,
   GetManyReqInterface,
   GetManySanitized,
-  SharedService,
+  USERAUTHORITIES,
   getWhereConditions,
+  relations,
+  select,
 } from '@app/opensync';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import {
+  EntityMetadata,
+  FindOptionsOrder,
+  FindOptionsRelations,
+  Like,
+  Repository,
+} from 'typeorm';
 
 @Injectable()
-export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytics> {
+export class EnrollmentAnalyticsService {
   constructor(
     @InjectRepository(EnrollmentAnalytics)
-    repository: TreeRepository<EnrollmentAnalytics>,
-  ) {
-    super(repository, EnrollmentAnalytics);
-  }
+    readonly repository: Repository<EnrollmentAnalytics>,
+  ) {}
+
+  findMany = async (payload: GetManyReqInterface) => {
+    const AUTHORITIES = USERAUTHORITIES(payload.user);
+    if (
+      AUTHORITIES?.includes(EnrollmentAnalytics.READ) ||
+      AUTHORITIES?.includes('ALL') ||
+      EnrollmentAnalytics.READ === 'ALL'
+    ) {
+      return await this.getMany({ payload, roles: AUTHORITIES });
+    }
+    this.throwGenericError(
+      new UnauthorizedException(
+        `You have no permission to view enrollment analysis`,
+      ),
+    );
+  };
 
   getMany = async (body: GetManySanitized): Promise<any> => {
     const { payload } = body;
@@ -25,7 +47,7 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
         page: payload.page + 1,
         total: 0,
         pageSize: payload.pageSize,
-        [this.entity['plural']]: [],
+        [EnrollmentAnalytics.plural]: [],
       };
     }
     const [data, total] = await this.repository.findAndCount({
@@ -40,8 +62,37 @@ export class EnrollmentAnalyticsService extends SharedService<EnrollmentAnalytic
       page: payload.page + 1,
       total,
       pageSize: payload.pageSize,
-      [this.entity['plural']]: data,
+      [EnrollmentAnalytics.plural]: data,
     };
+  };
+
+  private throwGenericError = (exception: any) => {
+    throw exception;
+  };
+
+  private getSelections = (fields: string) => {
+    return fields ? select(fields, this.repository.metadata) : {};
+  };
+
+  private getRelations = (
+    fields: string,
+  ): FindOptionsRelations<EnrollmentAnalytics> => {
+    const entity: EntityMetadata =
+      this.repository.manager.connection.getMetadata(EnrollmentAnalytics);
+    return fields ? relations(fields, entity) : [];
+  };
+
+  private getOrder = (order: string) => {
+    if (!order)
+      return {
+        created: 'DESC',
+      } as unknown as FindOptionsOrder<EnrollmentAnalytics>;
+    const orderArray = order?.split(':eq:');
+    return (orderArray?.length > 0
+      ? { [orderArray[0] || 'created']: orderArray[1] || 'DESC' }
+      : {
+          created: 'DESC',
+        }) as unknown as FindOptionsOrder<EnrollmentAnalytics>;
   };
 
   private sanitizeWhere = (where: object, payload: GetManyReqInterface) => {
