@@ -104,8 +104,8 @@ export class OrganisationUnitService extends SharedService<OrganisationUnit> {
     }
     return (payload?.user?.organisationUnits ?? []).map((organisationUnit) => {
       return {
-        ...(where || {}),
         ouPath: Like(`%${organisationUnit.id}%`),
+        ...(where || {}),
       };
     });
   };

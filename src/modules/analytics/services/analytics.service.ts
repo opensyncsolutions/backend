@@ -7,7 +7,7 @@ import {
   relations,
   select,
 } from '@app/opensync';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   EntityMetadata,
@@ -122,17 +122,18 @@ export class EnrollmentAnalyticsService {
 
   generateAnalytics = async (): Promise<void> => {
     try {
+      Logger.debug('STARTED RUNNING ANALYTICS', 'ANALYTICS');
       await this.repository.query(
         `DROP TABLE IF EXISTS enrollmentanalytics_temp;`,
       );
-
+      Logger.debug('CREATING TEMP ENROLLMENT ANALYTICS TABLE', 'ANALYTICS');
       await this.repository.query(
         `
         CREATE TABLE enrollmentanalytics_temp AS
         SELECT * FROM enrollmentanalytics WHERE 1=0;
       `,
       );
-
+      Logger.debug('INSERTING ENROLLMENT ANALYTICS IN TEMP TABLE', 'ANALYTICS');
       await this.repository.query(`
       INSERT INTO enrollmentanalytics_temp (id, enrollments, eligible, non, ou, created, updated)
       SELECT
@@ -148,13 +149,15 @@ export class EnrollmentAnalyticsService {
       GROUP BY
       ou;
   `);
-
+      Logger.debug('DROPING EXISTING ANALYTICS TABLE', 'ANALYTICS');
       await this.repository.query(`DROP TABLE enrollmentanalytics;`);
 
+      Logger.debug('RENAMING ENROLLMENT ANALYTICS TABLE', 'ANALYTICS');
       await this.repository.query(
         `ALTER TABLE enrollmentanalytics_temp RENAME TO enrollmentanalytics;`,
       );
 
+      Logger.debug('UPDATING TOTAL OBJECTIVE SUMMARIES', 'ANALYTICS');
       await this.repository.query(`
       UPDATE objective
       SET enrollments = (
@@ -162,8 +165,26 @@ export class EnrollmentAnalyticsService {
       FROM enrollment
       WHERE objective = objective.id);
   `);
+
+      Logger.debug('UPDATING OU PATHS', 'ANALYTICS');
+      await this.repository.query(`
+      WITH RECURSIVE PathCTE AS (
+        SELECT id, "parentId", CAST(id AS TEXT) AS path, 1 AS level
+        FROM organisationunit
+        WHERE "parentId" IS NULL
+        UNION ALL
+        SELECT t.id, t."parentId", p.path || '/' || t.id, p.level + 1
+        FROM organisationunit t
+        JOIN PathCTE p ON t."parentId" = p.id
+      )
+      UPDATE organisationunit AS t
+      SET oupath = p.path,  level = p.level
+      FROM PathCTE p
+      WHERE t.id = p.id;
+  `);
     } catch (e) {
       console.error(e);
+      Logger.error(e.message, 'ANALYTICS');
     }
   };
 }
