@@ -17,7 +17,7 @@ import { EnrollmentAnalyticsModule } from './modules/analytics/analytics.module'
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: resolve(__dirname, CLIENT),
+      rootPath: resolve(CLIENT),
       serveRoot: '/',
     }),
     TypeOrmModule.forRoot({

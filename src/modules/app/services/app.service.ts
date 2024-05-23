@@ -1,4 +1,12 @@
+import {
+  CLIENT,
+  FileInterface,
+  Menu,
+  TEMPFILES,
+  User
+} from '@app/opensync';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   existsSync,
   mkdirSync,
@@ -9,14 +17,6 @@ import {
 } from 'fs';
 import { rename } from 'fs/promises';
 import * as jszip from 'jszip';
-import {
-  SYSTEMPATH,
-  FileInterface,
-  TEMPFILES,
-  Menu,
-  User,
-} from '@app/opensync';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -28,8 +28,8 @@ export class AppService {
     const zip = readFileSync(file.path);
     const contents = await new jszip().loadAsync(zip);
     if (Object.keys(contents.files).includes('index.html')) {
-      await this.renameFrontEnd('client', 'client-old');
-      return await this.unzip(contents.files, 'client', user);
+      await this.renameFrontEnd('./client', './client-old');
+      return await this.unzip(contents.files, './client', user);
     }
     return { status: false, error: 'Missing entry point' };
   };
@@ -50,15 +50,15 @@ export class AppService {
     createNew = true,
   ) => {
     try {
-      if (existsSync(`${SYSTEMPATH}/${newName}`)) {
-        this.deleteFolder(`${SYSTEMPATH}/${newName}`);
+      if (existsSync(newName)) {
+        this.deleteFolder(newName);
       }
-      if (existsSync(`${SYSTEMPATH}/${appName}`)) {
-        await rename(`${SYSTEMPATH}/${appName}`, `${SYSTEMPATH}/${newName}`);
+      if (existsSync(appName)) {
+        await rename(appName, newName);
       }
 
       if (createNew) {
-        mkdirSync(`${SYSTEMPATH}/${appName}`);
+        mkdirSync(appName);
       }
     } catch (e) {}
   };
@@ -72,7 +72,7 @@ export class AppService {
       this.addMenu(user);
       return { status: true, message: 'App updated' };
     } catch (e) {
-      this.deleteFolder(`${SYSTEMPATH}/${appName}`);
+      this.deleteFolder(appName);
       await this.renameFrontEnd(`${appName}-old`, appName);
       this.throwError(new BadRequestException(e.message));
     }
@@ -85,7 +85,7 @@ export class AppService {
   };
 
   private createFiles = async (file: any, appName: string) => {
-    const location = `${SYSTEMPATH}/${appName}`;
+    const location = appName;
     try {
       if (file.dir || file.name?.includes('/')) {
         await this.createFolders(file, location);
@@ -149,7 +149,7 @@ export class AppService {
     Logger.debug('CHECKING MENU', 'MENU');
     try {
       const manifest = JSON.parse(
-        readFileSync(`${SYSTEMPATH}/client/manifest.webapp`, 'utf8'),
+        readFileSync(`${CLIENT}/manifest.webapp`, 'utf8'),
       );
       if (manifest?.menus && Array.isArray(manifest.menus)) {
         await this.createMenu(manifest.menus, user);

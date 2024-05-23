@@ -3,7 +3,7 @@ import { Menu, OrganisationUnit, Privilege, Role, User } from '../entities';
 import { schemaEntities } from '../schema.entities';
 
 export const SYSTEMPATH = './files';
-export const CLIENT = process.env.CLIENT || './files/client';
+export const CLIENT = process.env.CLIENT || './client';
 export const ASSETS = './files/assets';
 export const TEMPFILES = './files/tmp';
 export const TEMPLATES = './files/templates';
@@ -110,8 +110,8 @@ export const SYSTEM = async () => {
     ].filter((privilege) => privilege.value && privilege.value !== '');
   }
 
-  Privilege.createPrivileges(privileges);
-  Menu.createMenus('6269df23-f8a0-4776-bd89-3015521bc19d');
+  await Privilege.createPrivileges(privileges);
+  await Menu.createMenus('6269df23-f8a0-4776-bd89-3015521bc19d');
 };
 
 export const SESSIONTIME = Number(process.env.SESSION_TIME) || 5e8;

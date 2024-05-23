@@ -1,7 +1,9 @@
 FROM node:20.11.1-alpine as development
+RUN apk add --no-cache wget curl unzip jq python3
 WORKDIR /app
 COPY . ./
-RUN apk add --no-cache curl
+RUN chmod +x /app/client.sh
+RUN /app/client.sh
 RUN npm i  --legacy-peer-deps
 ENV SERVER_PORT 3000
 ENV FORCE_COLOR 3
@@ -30,6 +32,7 @@ RUN apk add --no-cache curl
 ENV TZ Africa/Dar_es_Salaam
 WORKDIR /app
 COPY --from=build /app/dist/ ./
+COPY --from=development /app/client/ ./client
 COPY --from=build /app/node_modules/ ./node_modules
 COPY --from=build /app/default__opensync_dp.png/ ./default__opensync_dp.png
 HEALTHCHECK --interval=30s --timeout=3s \
