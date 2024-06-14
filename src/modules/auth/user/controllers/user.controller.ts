@@ -84,6 +84,12 @@ export class UserController extends SharedController<User> {
   }
 
   @Get(':dp/dps')
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   getDp(@Param('dp') dp: string, @Res() res: any, @Query() query: any) {
     if (dp === 'default__opensync_dp.png') {
       return res.sendFile(dp, {
