@@ -22,6 +22,7 @@ import { UserService } from '../services/user.service';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ApiBody, ApiConsumes, ApiResponse } from '@nestjs/swagger';
 
 @Controller(`api/${User.plural}`)
 export class UserController extends SharedController<User> {
@@ -30,6 +31,26 @@ export class UserController extends SharedController<User> {
   }
 
   @Post('dps')
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'User Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('file', {

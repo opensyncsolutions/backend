@@ -1,4 +1,11 @@
 import {
+  AuthGuard,
+  Login,
+  SessionGuard,
+  User,
+  sanitizeResponse,
+} from '@app/opensync';
+import {
   Body,
   Controller,
   Get,
@@ -11,15 +18,8 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import {
-  User,
-  sanitizeResponse,
-  Login,
-  SessionGuard,
-  AuthGuard,
-} from '@app/opensync';
-import { UserService } from '../services/user.service';
 import { ApiResponse } from '@nestjs/swagger';
+import { UserService } from '../services/user.service';
 
 @Controller('api')
 export class AuthController {

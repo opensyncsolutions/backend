@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { AppService } from '../services/app.service';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -29,6 +29,18 @@ export class AppController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Record Not Found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('app', {

@@ -37,7 +37,7 @@ import {
 import { ASSETS, TEMPFILES } from '../../system';
 import { SharedService } from '../services/shared.service';
 import { SessionGuard } from '../..';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class SharedController<T extends BaseEntity> {
@@ -59,6 +59,7 @@ export class SharedController<T extends BaseEntity> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiBody({})
   async create(
     @Body() payload: T,
     @Res() res: any,
@@ -180,6 +181,14 @@ export class SharedController<T extends BaseEntity> {
   }
 
   @Post('bulky')
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiBody({})
   @UseGuards(SessionGuard)
   async updateBulky(@Body() payload: T[], @Res() res: any, @Req() req: any) {
     try {
@@ -240,6 +249,7 @@ export class SharedController<T extends BaseEntity> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Record Not Found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiBody({})
   async updateOne(
     @Res() res: any,
     @Req() req: any,
@@ -299,6 +309,18 @@ export class SharedController<T extends BaseEntity> {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('file', {
@@ -363,6 +385,18 @@ export class SharedController<T extends BaseEntity> {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('file', {
