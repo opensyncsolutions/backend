@@ -37,6 +37,7 @@ import {
 import { ASSETS, TEMPFILES } from '../../system';
 import { SharedService } from '../services/shared.service';
 import { SessionGuard } from '../..';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class SharedController<T extends BaseEntity> {
@@ -51,6 +52,13 @@ export class SharedController<T extends BaseEntity> {
   }
   @UseGuards(SessionGuard)
   @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async create(
     @Body() payload: T,
     @Res() res: any,
@@ -76,11 +84,18 @@ export class SharedController<T extends BaseEntity> {
 
   @UseGuards(SessionGuard)
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async getMany(
     @Res() res: any,
     @Query() query: any,
     @Req() req: any,
-  ): Promise<T> {
+  ): Promise<BaseEntity> {
     const pager: PagerInterface = pagerDetails({
       page: query.page,
       pageSize: query.pageSize,
@@ -144,6 +159,13 @@ export class SharedController<T extends BaseEntity> {
   }
   @UseGuards(SessionGuard)
   @Get('fields')
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async getFields(@Res() res: any, @Req() req: any): Promise<any[]> {
     return res
       .status(HttpStatus.OK)
@@ -176,6 +198,14 @@ export class SharedController<T extends BaseEntity> {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Get(':id')
   async getOne(
     @Res() res: any,
@@ -202,6 +232,14 @@ export class SharedController<T extends BaseEntity> {
 
   @UseGuards(SessionGuard)
   @Put(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async updateOne(
     @Res() res: any,
     @Req() req: any,
@@ -234,6 +272,14 @@ export class SharedController<T extends BaseEntity> {
 
   @UseGuards(SessionGuard)
   @Delete(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async deleteOne(
     @Res() res: any,
     @Param('id') id: string,
@@ -246,6 +292,13 @@ export class SharedController<T extends BaseEntity> {
   }
 
   @Post(':id/assets')
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('file', {
@@ -278,6 +331,14 @@ export class SharedController<T extends BaseEntity> {
   }
 
   @Get(':asset/assets')
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Asset Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   getAsset(
     @Param('asset') asset: string,
     @Res() res: Response,
@@ -295,6 +356,13 @@ export class SharedController<T extends BaseEntity> {
       .send({ error: 'Asset could not be found' });
   }
   @Post('imports')
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(SessionGuard)
   @UseInterceptors(
     FileInterceptor('file', {

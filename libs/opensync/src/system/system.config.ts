@@ -3,7 +3,7 @@ import { Menu, OrganisationUnit, Privilege, Role, User } from '../entities';
 import { schemaEntities } from '../schema.entities';
 
 export const SYSTEMPATH = './files';
-export const CLIENT = process.env.CLIENT || './client';
+export const CLIENT = process.env.CLIENT ?? './client';
 export const ASSETS = './files/assets';
 export const TEMPFILES = './files/tmp';
 export const TEMPLATES = './files/templates';
@@ -114,11 +114,11 @@ export const SYSTEM = async () => {
   await Menu.createMenus('6269df23-f8a0-4776-bd89-3015521bc19d');
 };
 
-export const SESSIONTIME = Number(process.env.SESSION_TIME) || 5e8;
+export const SESSIONTIME = Number(process.env.SESSION_TIME ?? 5e8);
 
 export const DB = {
   host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 5432,
+  port: Number(process.env.DB_PORT ?? 5432),
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
@@ -128,17 +128,17 @@ export const DB = {
 };
 
 export const APPENV = {
-  REDIS_HOST: process.env.REDIS_HOST || 'redis',
-  REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
+  REDIS_HOST: process.env.REDIS_HOST ?? 'redis',
+  REDIS_PORT: Number(process.env.REDIS_PORT) ?? 6379,
   NODE_ENV: (process.env.NODE_ENV ?? 'development') as
     | 'development'
     | 'test'
     | 'production',
-  COOKIE_SECRET: process.env.COOKIE_SECRET || 'opensync@12!AFYA!!',
+  COOKIE_SECRET: process.env.COOKIE_SECRET ?? 'opensync@12!AFYA!!',
   TEMPFILES: TEMPFILES,
   ASSETS: ASSETS,
   SYSTEMPATH: SYSTEMPATH,
   TEMPLATES: TEMPLATES,
   DOWNLOAD_COUNT: Number(process.env.DOWNLOAD_COUNT || 20),
-  ALLOWROOTS: (process.env.ALLOWROOTS || '').toLowerCase() === 'true',
+  ALLOWROOTS: (process.env.ALLOWROOTS ?? '').toLowerCase() === 'true',
 };

@@ -15,6 +15,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MenuService } from '../services/menu.service';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller(`api/${Menu.plural}`)
 export class MenuController extends SharedController<Menu> {
@@ -23,6 +24,14 @@ export class MenuController extends SharedController<Menu> {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Post()
   async create(@Body() payload: Menu | Menu, @Res() res: any, @Req() req: any) {
     this.service.validate(payload);

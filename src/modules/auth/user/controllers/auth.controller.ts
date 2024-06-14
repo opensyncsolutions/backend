@@ -19,6 +19,7 @@ import {
   AuthGuard,
 } from '@app/opensync';
 import { UserService } from '../services/user.service';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('api')
 export class AuthController {
@@ -26,6 +27,13 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('login')
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async login(
     @Res() res: any,
     @Session() session: any,
@@ -56,6 +64,14 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Get('me')
   async me(
     @Res() res: any,
@@ -78,6 +94,14 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Successful Response',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Record Not Found' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Get('logout')
   async logout(
     @Req() request: any,

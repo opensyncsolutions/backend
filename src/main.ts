@@ -55,6 +55,16 @@ async function bootstrap() {
   app.use(passport.session());
   if (APPENV.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
+      .addGlobalParameters({
+        name: 'fields',
+        in: 'query',
+        schema: { type: 'string' },
+      })
+      .addGlobalParameters({
+        name: 'filter',
+        in: 'query',
+        schema: { type: 'array' },
+      })
       .setTitle('OpenSYNC')
       .setVersion('1.0')
       .build();

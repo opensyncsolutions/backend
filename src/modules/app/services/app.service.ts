@@ -1,10 +1,4 @@
-import {
-  CLIENT,
-  FileInterface,
-  Menu,
-  TEMPFILES,
-  User
-} from '@app/opensync';
+import { CLIENT, FileInterface, Menu, TEMPFILES, User } from '@app/opensync';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
