@@ -6,16 +6,16 @@ import { UserService } from './user/services/user.service';
 import { AuthController } from './user/controllers/auth.controller';
 import { RoleController } from './role/controllers/role.controller';
 import { RoleService } from './role/services/role.service';
-import { PrivilegeController } from './privilege/controllers/role.controller';
+import { PrivilegeController } from './privilege/controllers/privilege.controller';
 import { PrivilegeService } from './privilege/services/privilege.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, Privilege])],
   controllers: [
-    UserController,
     AuthController,
     RoleController,
     PrivilegeController,
+    UserController,
   ],
   providers: [UserService, RoleService, PrivilegeService],
 })

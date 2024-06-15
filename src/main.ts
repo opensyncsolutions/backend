@@ -8,6 +8,7 @@ import {
   PORT,
   SYSTEM,
   schemaEntities,
+  splitByCapital,
 } from '@app/opensync';
 import * as session from 'express-session';
 import { createClient } from 'redis';
@@ -56,13 +57,32 @@ async function bootstrap() {
   if (APPENV.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .addGlobalParameters({
+        name: 'page',
+        in: 'query',
+        description:
+          'This specifies the page number to be returned in the response',
+        schema: { type: 'integer' },
+      })
+      .addGlobalParameters({
+        name: 'pageSize',
+        in: 'query',
+        description:
+          'This specifies the number of records to be returned in the response',
+        schema: { type: 'integer' },
+      })
+      .addGlobalParameters({
         name: 'fields',
         in: 'query',
+        description:
+          'This specifies the fields to be returned in the response. You can also include relationships in this query',
         schema: { type: 'string' },
       })
       .addGlobalParameters({
         name: 'filter',
         in: 'query',
+        example: 'name:eq:John',
+        description:
+          'This query is used to filter the response. You can add searches and filters in this query',
         schema: { type: 'array' },
       })
       .setTitle('OpenSYNC')
@@ -73,8 +93,16 @@ async function bootstrap() {
       extraModels: schemaEntities,
       deepScanRoutes: true,
     };
-    const Document = SwaggerModule.createDocument(app, config, options);
-    SwaggerModule.setup('api', app, Document);
+    const document = SwaggerModule.createDocument(app, config, options);
+    for (const path in document.paths) {
+      for (const method in document.paths[path]) {
+        document.paths[path][method].operationId = splitByCapital(
+          (document.paths[path][method].operationId ?? '').split('_')[1],
+        );
+      }
+    }
+
+    SwaggerModule.setup('api', app, document);
   }
   await app.listen(PORT);
   Logger.debug(`App running on port: ${PORT}`, 'APP PORT');

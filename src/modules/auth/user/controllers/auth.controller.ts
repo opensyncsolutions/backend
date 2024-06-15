@@ -1,7 +1,11 @@
 import {
   AuthGuard,
+  BadRequestError,
+  InternalServerError,
   Login,
+  NotFoundError,
   SessionGuard,
+  UnauthorizedError,
   User,
   sanitizeResponse,
 } from '@app/opensync';
@@ -18,22 +22,41 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../services/user.service';
 
+@ApiTags('Auth')
 @Controller('api')
 export class AuthController {
   constructor(private service: UserService) {}
 
   @UseGuards(AuthGuard)
   @Post('login')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    schema: {
+      example: {
+        error: 'Invalid Username or Password.',
+      },
+    },
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
+  @ApiOperation({
+    summary: 'User Login',
+    description:
+      'This endpoint allows user to login to the system. The user is authenticated and a session is created.',
+  })
   async login(
     @Res() res: any,
     @Session() session: any,
@@ -64,14 +87,32 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    schema: { example: { error: 'Invalid fields supplied' } },
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
+  @ApiOperation({
+    summary: 'Get Logged In User Details',
+    description:
+      'This endpoint allows you get the details of the currently logged in user.',
+  })
   @Get('me')
   async me(
     @Res() res: any,
@@ -94,14 +135,32 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
+  @ApiOperation({
+    summary: 'User Logout',
+    description:
+      'This endpoint allows user to logout of the system. The session is destroyed.',
+  })
   @Get('logout')
   async logout(
     @Req() request: any,

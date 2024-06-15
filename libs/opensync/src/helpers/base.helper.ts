@@ -79,3 +79,9 @@ export const dateFormatter = (dateToFormat: string) => {
     day: 'numeric',
   });
 };
+
+export const splitByCapital = (word: string) => {
+  let result = word.replace(/([A-Z])/g, ' $1').trim();
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result;
+};

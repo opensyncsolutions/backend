@@ -1,7 +1,11 @@
 import {
+  BadRequestError,
+  InternalServerError,
   Menu,
+  NotFoundError,
   SessionGuard,
   SharedController,
+  UnauthorizedError,
   errorSanitizer,
   sanitizeResponse,
 } from '@app/opensync';
@@ -15,8 +19,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MenuService } from '../services/menu.service';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Menus')
 @Controller(`api/${Menu.plural}`)
 export class MenuController extends SharedController<Menu> {
   constructor(readonly service: MenuService) {
@@ -25,13 +30,30 @@ export class MenuController extends SharedController<Menu> {
 
   @UseGuards(SessionGuard)
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Successful Response',
+    type: Menu,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   @Post()
   async create(@Body() payload: Menu | Menu, @Res() res: any, @Req() req: any) {
     this.service.validate(payload);
