@@ -1,4 +1,12 @@
-import { FileInterface, SessionGuard, TEMPFILES } from '@app/opensync';
+import {
+  BadRequestError,
+  FileInterface,
+  InternalServerError,
+  NotFoundError,
+  SessionGuard,
+  TEMPFILES,
+  UnauthorizedError,
+} from '@app/opensync';
 import {
   Controller,
   Get,
@@ -14,21 +22,39 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { AppService } from '../services/app.service';
-import { ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiResponse, ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Apps')
 @Controller()
 export class AppController {
   constructor(private readonly service: AppService) {}
 
   @Post('api/apps')
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Successful Response',
+    schema: { example: { status: true, message: 'App uploaded successfully' } },
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -79,25 +105,43 @@ export class AppController {
     }
   }
   @Get('api/status')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   heartBeats() {
     return '✅';
   }
 
   @Get('/images/icons/gear.png')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   gear(@Res() res: Response) {
     return res?.sendFile('default__opensync_dp.png', {
       root: './',
@@ -105,13 +149,22 @@ export class AppController {
   }
 
   @Get('/favicon.ico')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
   @ApiResponse({
-    status: 200,
-    description: 'Successful Response',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 404, description: 'Record Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record Not Found',
+    type: NotFoundError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   ico(@Res() res: Response) {
     return res?.sendFile('default__opensync_dp.png', {
       root: './',

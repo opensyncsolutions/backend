@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -12,8 +13,12 @@ import {
 } from '@nestjs/common';
 import {
   ASSETS,
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
   SessionGuard,
   SharedController,
+  UnauthorizedError,
   User,
   imageFileFilter,
   originalNames,
@@ -22,8 +27,14 @@ import { UserService } from '../services/user.service';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { ApiBody, ApiConsumes, ApiResponse } from '@nestjs/swagger';
-
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+@ApiTags('Users')
 @Controller(`api/${User.plural}`)
 export class UserController extends SharedController<User> {
   constructor(service: UserService) {
@@ -32,14 +43,42 @@ export class UserController extends SharedController<User> {
 
   @Post('dps')
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Successful Response',
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'User Not Found' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
+    schema: {
+      example: { statusCode: 400, message: 'Only images are allowed' },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Not Found',
+    type: NotFoundError,
+    schema: {
+      example: { statusCode: 400, message: 'Only images are allower' },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+    type: UnauthorizedError,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User Not Found' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   @ApiConsumes('multipart/form-data')
+  @ApiOperation({
+    summary: 'Upload User profile picture',
+    description:
+      'This endpoint allows user to upload their profile picture. The file is processed and stored accordingly.',
+  })
   @ApiBody({
     schema: {
       type: 'object',
@@ -72,7 +111,7 @@ export class UserController extends SharedController<User> {
       fileFilter: imageFileFilter,
     }),
   )
-  async uploadedFile(@UploadedFile() file: any, @Req() req: any) {
+  async uploadDp(@UploadedFile() file: any, @Req() req: any) {
     try {
       return await this.service.uploadDp(file, req.session['user']);
     } catch (e) {
@@ -85,11 +124,19 @@ export class UserController extends SharedController<User> {
 
   @Get(':dp/dps')
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Successful Response',
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 500, description: 'Internal server error' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad Request',
+    type: BadRequestError,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+    type: InternalServerError,
+  })
   getDp(@Param('dp') dp: string, @Res() res: any, @Query() query: any) {
     if (dp === 'default__opensync_dp.png') {
       return res.sendFile(dp, {
