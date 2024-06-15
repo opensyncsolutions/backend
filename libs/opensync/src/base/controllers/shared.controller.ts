@@ -389,7 +389,11 @@ export class SharedController<T extends BaseEntity> {
 
   @UseGuards(SessionGuard)
   @Delete(':id')
-  @ApiResponse({ status: HttpStatus.OK, description: 'Successful Response' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successful Response',
+    schema: { example: 'Record deleted successfully' },
+  })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'Bad Request',
